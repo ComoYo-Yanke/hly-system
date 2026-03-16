@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: hly-system
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/hly-system
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 76993965996@Mysql
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
