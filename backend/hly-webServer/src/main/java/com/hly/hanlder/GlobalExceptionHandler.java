@@ -1,5 +1,6 @@
 package com.hly.hanlder;
 
+import com.hly.constant.ErrorCodeConstant;
 import com.hly.constant.InfoConstant;
 import com.hly.exception.BaseException;
 import com.hly.exception.PasswordErrorException;
@@ -45,7 +46,7 @@ public class GlobalExceptionHandler {
             
             System.out.println("当前线程：" + Thread.currentThread().getId());
             
-            return Result.error(msg, 409);
+            return Result.error(msg, ErrorCodeConstant.COUNT_EXIST);
         }else{
             return Result.error(InfoConstant.UNKNOWN_ERROR);
         }
