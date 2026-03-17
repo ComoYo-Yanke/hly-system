@@ -8,9 +8,12 @@ import com.hly.dto.UserLoginDTO;
 import com.hly.entity.User;
 import com.hly.mapper.UserMapper;
 import com.hly.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import java.time.LocalDateTime;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,5 +43,23 @@ public class UserServiceImpl implements UserService {
             throw new AccountLockedException(InfoConstant.ACCOUNT_LOCKED);
         }
         return user;
+    }
+    
+    @Override
+    public void register(UserLoginDTO userLoginDTO) {
+        User user = new User();
+        BeanUtils.copyProperties(userLoginDTO, user);
+        
+        // 初始化数据
+        user.setStatus(InfoConstant.ENABLE);
+        user.setCreatedTime(LocalDateTime.now());
+        user.setUpdatedTime(LocalDateTime.now());
+        user.setName(userLoginDTO.getUsername());  // 初始姓名与账号（username）相同
+        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        // TODO 后续添加默认初始头像
+        user.setAvatar(null);
+        
+        userMapper.insert(user);
+        
     }
 }

@@ -6,4 +6,6 @@ import com.hly.entity.User;
 
 public interface UserService {
     User login(UserLoginDTO userLoginDTO);
+    
+    void register(UserLoginDTO userLoginDTO);
 }

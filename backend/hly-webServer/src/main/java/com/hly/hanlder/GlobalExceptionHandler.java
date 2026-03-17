@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
             
             System.out.println("当前线程：" + Thread.currentThread().getId());
             
-            return Result.error(msg);
+            return Result.error(msg, 409);
         }else{
             return Result.error(InfoConstant.UNKNOWN_ERROR);
         }

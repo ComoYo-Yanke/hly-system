@@ -2,6 +2,7 @@ package com.hly.mapper;
 
 import com.hly.entity.User;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -9,4 +10,10 @@ import org.apache.ibatis.annotations.Select;
 public interface UserMapper {
     @Select("select * from user where username = #{username} limit 1")
     User getByUsername(String username);
+    
+    @Insert("insert into user" +
+            "(username, password, avatar, status, created_time, updated_time, name)" +
+            "values " +
+            "(#{username}, #{password}, #{avatar}, #{status}, #{createdTime}, #{updatedTime}, #{name})")
+    void insert(User user);
 }

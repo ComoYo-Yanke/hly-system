@@ -23,6 +23,7 @@ public class WebMvcConfiguration {
         log.info("注册自定义拦截器");
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .excludePathPatterns("/api/user/login")
+                .excludePathPatterns("/api/user/register")
                 .addPathPatterns("/api/**");
     }
     

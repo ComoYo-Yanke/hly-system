@@ -51,4 +51,23 @@ public class UserController {
         
         return Result.success(userLoginVO);
     }
+    
+    @PostMapping("/register")
+    @ApiModelProperty("用户注册")
+    public Result register(@RequestBody UserLoginDTO userLoginDTO){
+        log.info("用户注册：{}", userLoginDTO);
+        userService.register(userLoginDTO);
+        
+        return Result.success();
+    }
+    
+    
+    /**
+     * 登出
+     * @return
+     */
+    @PostMapping("/logout")
+    public Result<String> logout() {
+        return Result.success();
+    }
 }
