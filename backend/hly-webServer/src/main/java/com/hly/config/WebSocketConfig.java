@@ -1,5 +1,3 @@
 package com.hly.config;
 
-public class WebSocketConfig {
-
-}
+public class WebSocketConfig { }
