@@ -18,4 +18,5 @@ public class User {
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
     private String name;
+    private Integer role;
 }

@@ -11,10 +11,7 @@ import com.hly.vo.UserLoginVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,10 +34,11 @@ public class UserController {
         
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.ID, user.getId());
+        
         String token = JwtUtil.createJWT(
-                jwtProperties.getAdminSecretKey(),
                 jwtProperties.getAdminTtl(),
                 claims);
+        
         
         UserLoginVO userLoginVO = UserLoginVO.builder()
                 .id(user.getId())
@@ -69,5 +67,10 @@ public class UserController {
     @PostMapping("/logout")
     public Result<String> logout() {
         return Result.success();
+    }
+    
+    @GetMapping("/test")
+    public Result<String> test(){
+        return Result.success("test");
     }
 }

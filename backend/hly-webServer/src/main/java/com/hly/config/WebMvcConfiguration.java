@@ -4,9 +4,8 @@ import com.hly.interceptor.JwtTokenAdminInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
@@ -15,16 +14,17 @@ import java.util.List;
  */
 @Configuration
 @Slf4j
-public class WebMvcConfiguration {
+public class WebMvcConfiguration implements WebMvcConfigurer {
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
     
-    protected void addInterceptor(InterceptorRegistry registry){
+    @Override
+    public void addInterceptors(InterceptorRegistry registry){
         log.info("注册自定义拦截器");
         registry.addInterceptor(jwtTokenAdminInterceptor)
-                .excludePathPatterns("/api/user/login")
-                .excludePathPatterns("/api/user/register")
-                .addPathPatterns("/api/**");
+                .addPathPatterns("/**")
+                .excludePathPatterns("/api/user/login", "/api/user/register");
+                
     }
     
     

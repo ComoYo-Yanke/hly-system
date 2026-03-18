@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class InfoConstant {
     public static final String RESPONSE_SUCCESS = "响应成功";
-    public static final String RESPONSE_401000 = "登录令牌失效";
+    public static final String RESPONSE_401000 = "登录令牌失效或无令牌";
     public static final String RESPONSE_401001 = "登出";
     public static final String RESPONSE_401004 = "重复登录";
     public static final String ALREADY_EXISTS = "已存在";

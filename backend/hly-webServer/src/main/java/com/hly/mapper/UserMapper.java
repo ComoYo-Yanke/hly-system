@@ -12,8 +12,8 @@ public interface UserMapper {
     User getByUsername(String username);
     
     @Insert("insert into user" +
-            "(username, password, avatar, status, created_time, updated_time, name)" +
+            "(username, password, avatar, status, created_time, updated_time, name, role)" +
             "values " +
-            "(#{username}, #{password}, #{avatar}, #{status}, #{createdTime}, #{updatedTime}, #{name})")
+            "(#{username}, #{password}, #{avatar}, #{status}, #{createdTime}, #{updatedTime}, #{name}, #{role})")
     void insert(User user);
 }
