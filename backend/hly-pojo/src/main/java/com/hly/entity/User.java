@@ -21,4 +21,5 @@ public class User {
     private LocalDateTime updatedTime;
     private String name;
     private Integer role;
+    private Integer gender;
 }

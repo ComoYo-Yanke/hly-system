@@ -17,4 +17,6 @@ public class UserUpdateDTO {
     private String password;
     @ApiModelProperty("头像_URL")
     private String avatar;
+    @ApiModelProperty("性别")
+    private Integer gender;
 }

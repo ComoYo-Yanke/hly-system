@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
         user.setName(userLoginDTO.getUsername());  // 初始姓名与账号（username）相同
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         user.setRole(0);
+        user.setGender(1);
         // TODO 后续添加默认初始头像
         user.setAvatar(null);
         
