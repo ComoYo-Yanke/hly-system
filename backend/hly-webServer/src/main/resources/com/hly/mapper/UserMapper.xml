@@ -18,4 +18,16 @@
 
         where id = #{id}
     </update>
+    <select id="pageQuery" resultType="com.hly.entity.User">
+        select * from user
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+        </where>
+        order by created_time desc
+    </select>
 </mapper>

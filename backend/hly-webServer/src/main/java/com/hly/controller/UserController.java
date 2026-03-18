@@ -1,8 +1,10 @@
 package com.hly.controller;
 
 import com.hly.constant.JwtClaimsConstant;
+import com.hly.dto.UserPageDTO;
 import com.hly.dto.UserUpdateDTO;
 import com.hly.properties.JwtProperties;
+import com.hly.result.PageResult;
 import com.hly.result.Result;
 import com.hly.service.UserService;
 import com.hly.utils.JwtUtil;
@@ -82,5 +84,13 @@ public class UserController {
         log.info("更新用户：{} , {}", userUpdateDTO.getId(), userUpdateDTO.getName());
         userService.update(userUpdateDTO);
         return Result.success();
+    }
+    
+    @GetMapping("/page")
+    @ApiModelProperty("普通用户查询用户列表")
+    public Result<PageResult> page(@RequestBody UserPageDTO userPageDTO){
+        log.info("分页查询 {}", userPageDTO);
+        PageResult pageResult = userService.pageQuery(userPageDTO);
+        return Result.success(pageResult);
     }
 }

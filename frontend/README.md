@@ -152,15 +152,15 @@
 - **响应示例**：
   ```json
   {
-    code: 200,
-    msg: "success",
-    data:{
-      total:"int 总记录数",
-      row:{
-        id:"int 可选",
-        name:"int 可选",
-        avatar:"string 可选",
-        gender:"int 可选"
+    "code": 200,
+    "msg": "success",
+    "data":{
+      "total":"int 总记录数",
+      "row":{
+        "id":"int 可选",
+        "name":"int 可选",
+        "avatar":"string 可选",
+        "gender":"int 可选"
       },
     }
   }
@@ -179,9 +179,9 @@
 - **响应示例**：
   ```json
   {
-    code: 200,
-    msg: "success",
-    data: null
+    "code": 200,
+    "msg": "success",
+    "data": null
   }
   ```
 ---

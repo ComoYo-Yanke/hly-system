@@ -1,6 +1,10 @@
 package com.hly.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.hly.constant.DataConstant;
 import com.hly.constant.InfoConstant;
+import com.hly.dto.UserPageDTO;
 import com.hly.dto.UserUpdateDTO;
 import com.hly.exception.AccountLockedException;
 import com.hly.exception.AccountNotFoundException;
@@ -8,6 +12,7 @@ import com.hly.exception.PasswordErrorException;
 import com.hly.dto.UserLoginDTO;
 import com.hly.entity.User;
 import com.hly.mapper.UserMapper;
+import com.hly.result.PageResult;
 import com.hly.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -16,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -79,5 +85,19 @@ public class UserServiceImpl implements UserService {
         }
         log.info("更新用户基本信息：{}",user);
         userMapper.updateById(user);
+    }
+    
+    @Override
+    public PageResult pageQuery(UserPageDTO userPageDTO){
+        // TODO 后续新增其他排序方式：如按照被关注总数，当前用户关注置顶
+        if(userPageDTO.getPage() == null) userPageDTO.setPage(DataConstant.DEFAULT_PAGE);
+        if(userPageDTO.getPageSize() == null) userPageDTO.setPageSize(DataConstant.DEFAULT_PAGE_SIZE);
+        log.info("用户分页查询：{}", userPageDTO);
+        PageHelper.startPage(userPageDTO.getPage(), userPageDTO.getPageSize());
+        Page<User> page = userMapper.pageQuery(userPageDTO);
+        long total = page.getTotal();
+        List<User> records = page.getResult();
+        
+        return new PageResult(total, records);
     }
 }
