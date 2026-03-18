@@ -1,6 +1,7 @@
 package com.hly.service.impl;
 
 import com.hly.constant.InfoConstant;
+import com.hly.dto.UserUpdateDTO;
 import com.hly.exception.AccountLockedException;
 import com.hly.exception.AccountNotFoundException;
 import com.hly.exception.PasswordErrorException;
@@ -8,6 +9,7 @@ import com.hly.dto.UserLoginDTO;
 import com.hly.entity.User;
 import com.hly.mapper.UserMapper;
 import com.hly.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import org.springframework.util.DigestUtils;
 import java.time.LocalDateTime;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
@@ -62,5 +65,18 @@ public class UserServiceImpl implements UserService {
         
         userMapper.insert(user);
         
+    }
+    
+    @Override
+    public void update(UserUpdateDTO userUpdateDTO){
+        User user = new User();
+        BeanUtils.copyProperties(userUpdateDTO, user);
+        user.setUpdatedTime(LocalDateTime.now());
+        
+        if(!(user.getPassword() == null || user.getPassword() == "")){
+            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        }
+        log.info("更新用户基本信息：{}",user);
+        userMapper.updateById(user);
     }
 }

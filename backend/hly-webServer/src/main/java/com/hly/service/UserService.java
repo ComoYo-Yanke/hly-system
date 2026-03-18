@@ -1,6 +1,7 @@
 package com.hly.service;
 
 import com.hly.dto.UserLoginDTO;
+import com.hly.dto.UserUpdateDTO;
 import com.hly.entity.User;
 
 
@@ -8,4 +9,6 @@ public interface UserService {
     User login(UserLoginDTO userLoginDTO);
     
     void register(UserLoginDTO userLoginDTO);
+    
+    void update(UserUpdateDTO userUpdateDTO);
 }

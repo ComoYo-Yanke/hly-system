@@ -5,6 +5,7 @@ import com.hly.constant.InfoConstant;
 import com.hly.exception.BaseException;
 import com.hly.exception.PasswordErrorException;
 import com.hly.result.Result;
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -56,7 +57,18 @@ public class GlobalExceptionHandler {
     public Result exceptionHandler(PasswordErrorException ex){
         log.error("异常信息：{}", ex.getMessage());
         String message = ex.getMessage();
-        return Result.error("密码错误！");
+        return Result.error(InfoConstant.PASSWORD_ERROR);
+    }
+    
+//    @ExceptionHandler
+//    public Result allHandler(Exception e){
+//        log.error("异常:{}", e.getMessage());
+//        return Result.error(InfoConstant.UNKNOWN_ERROR);
+//    }
+
+    public Result notFoundHandler(NotFoundException e){
+        log.error("异常:{}", e.getMessage());
+        return Result.error(InfoConstant.NOT_FOUND_RESOURCE);
         
     }
 

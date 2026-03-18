@@ -1,6 +1,7 @@
 package com.hly.controller;
 
 import com.hly.constant.JwtClaimsConstant;
+import com.hly.dto.UserUpdateDTO;
 import com.hly.properties.JwtProperties;
 import com.hly.result.Result;
 import com.hly.service.UserService;
@@ -36,7 +37,7 @@ public class UserController {
         claims.put(JwtClaimsConstant.ID, user.getId());
         
         String token = JwtUtil.createJWT(
-                jwtProperties.getAdminTtl(),
+                3,
                 claims);
         
         
@@ -65,6 +66,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/logout")
+    @ApiModelProperty("登出")
     public Result<String> logout() {
         return Result.success();
     }
@@ -72,5 +74,13 @@ public class UserController {
     @GetMapping("/test")
     public Result<String> test(){
         return Result.success("test");
+    }
+    
+    @PutMapping
+    @ApiModelProperty("更新用户基本信息")
+    public Result update(@RequestBody UserUpdateDTO userUpdateDTO){
+        log.info("更新用户：{} , {}", userUpdateDTO.getId(), userUpdateDTO.getName());
+        userService.update(userUpdateDTO);
+        return Result.success();
     }
 }

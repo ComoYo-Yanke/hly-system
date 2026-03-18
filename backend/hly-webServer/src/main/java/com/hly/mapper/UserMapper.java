@@ -16,4 +16,6 @@ public interface UserMapper {
             "values " +
             "(#{username}, #{password}, #{avatar}, #{status}, #{createdTime}, #{updatedTime}, #{name}, #{role})")
     void insert(User user);
+    
+    void updateById(User user);
 }

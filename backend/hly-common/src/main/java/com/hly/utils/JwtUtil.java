@@ -12,6 +12,7 @@ import java.util.Map;
 public class JwtUtil {
     
     private static final String SECRET_KEY = "comoyoyanke1234567890";
+    private static final Long TTL_MILLIS = 1000 * 60 * 60L;
     
     /**
      * 生成JWT令牌
@@ -26,7 +27,7 @@ public class JwtUtil {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         
         // 生成JWT的时间
-        long expMillis = System.currentTimeMillis() + ttlMillis;
+        long expMillis = System.currentTimeMillis() + ttlMillis * TTL_MILLIS;
         Date exp = new Date(expMillis);
         
         // 设置jwt的body

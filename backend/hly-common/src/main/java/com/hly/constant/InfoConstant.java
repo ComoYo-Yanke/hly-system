@@ -16,4 +16,5 @@ public class InfoConstant {
     public static final Integer ENABLE  = 1;
     public static final String ACCOUNT_LOCKED = "账户被禁用";
     public static final String UNKNOWN_ERROR = "未知错误";
+    public static final String NOT_FOUND_RESOURCE = "用户访问资源不存在";
 }

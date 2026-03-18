@@ -1,5 +1,6 @@
 package com.hly.entity;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class User {
+    @ApiModelProperty("用户id")
     private Integer id;
     private String username;
     private String password;

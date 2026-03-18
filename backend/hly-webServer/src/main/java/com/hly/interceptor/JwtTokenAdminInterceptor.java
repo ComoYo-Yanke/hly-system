@@ -51,7 +51,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         }
 
         //1、从请求头中获取令牌
-        String token = request.getHeader(jwtProperties.getAdminTokenName());
+        String token = request.getHeader("token");
         if(token == null || token.isEmpty()){
             log.info("令牌为空, 响应401000");
             response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
