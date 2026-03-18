@@ -125,6 +125,7 @@
 - **请求参数**：
   ```json
   {
+    "id": "Integer 必填"
     "password":"string 可选", 
     "avatar":"string 可选",
     "name":"string 可选"
