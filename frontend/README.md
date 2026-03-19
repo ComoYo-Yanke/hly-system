@@ -121,21 +121,69 @@
 
 - **URL**：`/user`
 - **方法**：PUT
-- **请求头**：`Authorization: Bearer {token}`
+- **请求头**：`token: token {token}`
 - **请求参数**：
   ```json
   {
+    "id": "Integer 必填",
     "password":"string 可选", 
     "avatar":"string 可选",
-    "name":"string 可选"
-    
+    "name":"string 可选",
+    "gender":"int可选"
   }
   ```
 - **响应示例**：
   ```json
-  { "code": 401001, "msg": "修改成功" }
+  { "code": 200, "msg": "修改成功" }
   ```
-
+### 1.5 分页查询用户列表
+- **URL**：`/user/list`
+- **方法**：GET
+- **请求头**：`token:  {token}`
+- **请求参数**：
+  ```json
+  {
+    "name":"string 可选",
+    "gender":"int可选",
+    "page":"int 可选",
+    "pageSize":"int 可选"
+  }
+  ```
+- **响应示例**：
+  ```json
+  {
+    "code": 200,
+    "msg": "success",
+    "data":{
+      "total":"int 总记录数",
+      "row":{
+        "id":"int 可选",
+        "name":"int 可选",
+        "avatar":"string 可选",
+        "gender":"int 可选"
+      },
+    }
+  }
+  ```
+---
+### 1.6 普通用户注销
+- **URL**：`/user/close/{id}`
+- **方法**：DELETE
+- **请求头**：`token:  {token}`
+- **请求参数**：
+  ```json
+  {
+    "id":"int 必填"
+  }
+  ```
+- **响应示例**：
+  ```json
+  {
+    "code": 200,
+    "msg": "success",
+    "data": null
+  }
+  ```
 ---
 
 ## 2. 健康事件接口
@@ -469,6 +517,9 @@
 ---
 
 ## 6. 管理员接口
+// TODO 后续添加管理员接口,SpringSecurity
+
+// TODO 后续添加AI模型接口,作用于快速生成健康建议与帖子内容
 
 ## 7. 页面路由与接口对应关系（参考）
 
