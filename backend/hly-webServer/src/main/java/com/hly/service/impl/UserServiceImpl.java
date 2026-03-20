@@ -14,6 +14,8 @@ import com.hly.entity.User;
 import com.hly.mapper.UserMapper;
 import com.hly.result.PageResult;
 import com.hly.service.UserService;
+import com.hly.utils.RedisUtil;
+import com.hly.utils.ThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,8 @@ public class UserServiceImpl implements UserService {
             //账号被锁定
             throw new AccountLockedException(InfoConstant.ACCOUNT_LOCKED);
         }
+        
+        
         return user;
     }
     

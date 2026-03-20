@@ -1,6 +1,8 @@
 package com.hly.utils;
 
 import java.nio.charset.StandardCharsets;
+
+import com.hly.constant.JwtClaimsConstant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -56,5 +58,17 @@ public class JwtUtil {
                 // 设置需要解析的jwt
                 .parseClaimsJws(token).getBody();
         return claims;
+    }
+    
+    // 通过用户token获取id
+    public static Integer getUserIdByToken(String token){
+        Claims claims = parseJWT(token);
+        return claims.get(JwtClaimsConstant.ID, Integer.class);
+    }
+    
+    // 对比两个token是否相等
+    public static boolean twoOfTokensIsEqual(String token1, String token2){
+        if(token1.equals(token2)) return true;
+        else return false;
     }
 }

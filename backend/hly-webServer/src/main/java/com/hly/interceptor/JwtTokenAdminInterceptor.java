@@ -8,6 +8,7 @@ import com.hly.context.BaseContext;
 import com.hly.properties.JwtProperties;
 import com.hly.utils.JwtUtil;
 import com.hly.utils.ThreadLocalUtil;
+import com.hly.utils.TokenCheckUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,6 +33,8 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
     
     @Autowired
     private JwtProperties jwtProperties;
+    @Autowired
+    private TokenCheckUtil tokenCheckUtil;
 
     /**
      * 校验jwt
@@ -44,6 +47,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        
         //判断当前拦截到的是Controller的方法还是其他资源
         if (!(handler instanceof HandlerMethod)) {
             //当前拦截到的不是动态方法，直接放行
@@ -52,6 +56,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
         //1、从请求头中获取令牌
         String token = request.getHeader("token");
+        ThreadLocalUtil.setCurrentIdS(JwtUtil.getUserIdByToken(token));
         if(token == null || token.isEmpty()){
             log.info("令牌为空, 响应401000");
             response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
@@ -68,14 +73,24 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         try {
             log.info("jwt校验:{}", token);
             Claims claims = JwtUtil.parseJWT(token);
-            Integer userId = Integer.valueOf(claims.get(JwtClaimsConstant.ID).toString());
+            Integer userId = JwtUtil.getUserIdByToken(token);
             log.info("当前用户id：", userId);
-//            BaseContext.setCurrentId(userId);
             ThreadLocalUtil.setCurrentIdS(userId);
+            
+            // 进行后登踢先登操作
+            if(tokenCheckUtil.tokenIsRepeated(token)){
+                log.info("有重复登录");
+                response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
+                return false;
+            }
+            
+            ThreadLocalUtil.setCurrentIdS(JwtUtil.getUserIdByToken(token));
             //3、通过，放行
+            log.info("令牌合法，放行");
             return true;
         } catch (Exception ex) {
             //4、不通过，响应401状态码
+            log.info("令牌校验时出错了:{}",ex.getMessage());
             response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
             return false;
         }

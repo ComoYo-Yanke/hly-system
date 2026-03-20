@@ -10,12 +10,15 @@ import com.hly.service.UserService;
 import com.hly.utils.JwtUtil;
 import com.hly.dto.UserLoginDTO;
 import com.hly.entity.User;
+import com.hly.utils.RedisUtil;
+import com.hly.utils.ThreadLocalUtil;
 import com.hly.vo.UserLoginVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.transform.sax.SAXTransformerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +31,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private JwtProperties jwtProperties;
+    @Autowired
+    private RedisUtil redisUtil;
     
     @PostMapping("/login")
     @ApiModelProperty("用户登录")
@@ -38,10 +43,7 @@ public class UserController {
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.ID, user.getId());
         
-        String token = JwtUtil.createJWT(
-                3,
-                claims);
-        
+        String token = JwtUtil.createJWT(3, claims);
         
         UserLoginVO userLoginVO = UserLoginVO.builder()
                 .id(user.getId())
@@ -50,6 +52,9 @@ public class UserController {
                 .token(token)
                 .build();
         
+        // 将当前用户id以及 token 存入redis
+        ThreadLocalUtil.setCurrentIdS(userLoginVO.getId());
+        redisUtil.setToken(userLoginVO.getId(), userLoginVO.getToken());
         return Result.success(userLoginVO);
     }
     
@@ -75,6 +80,8 @@ public class UserController {
     
     @GetMapping("/test")
     public Result<String> test(){
+        System.out.println(ThreadLocalUtil.getCurrentIdS());
+        
         return Result.success("test");
     }
     
