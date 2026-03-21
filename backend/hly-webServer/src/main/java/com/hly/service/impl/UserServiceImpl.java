@@ -14,15 +14,12 @@ import com.hly.entity.User;
 import com.hly.mapper.UserMapper;
 import com.hly.result.PageResult;
 import com.hly.service.UserService;
-import com.hly.utils.JwtUtil;
 import com.hly.utils.RedisUtil;
-import com.hly.utils.ThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -117,5 +114,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signOff(Integer id){
         userMapper.deleteById(id);
+        redisUtil.deleteToken(id);
     }
 }

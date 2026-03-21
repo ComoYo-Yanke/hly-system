@@ -167,7 +167,7 @@
   ```
 ---
 ### 1.6 普通用户注销
-- **URL**：`/user/close/{id}`
+- **URL**：`/user/close`
 - **方法**：DELETE
 - **请求头**：`token:  {token}`
 - **请求参数**：

@@ -14,12 +14,10 @@ import com.hly.utils.RedisUtil;
 import com.hly.utils.ThreadLocalUtil;
 import com.hly.vo.UserLoginVO;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.transform.sax.SAXTransformerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,7 +108,6 @@ public class UserController {
     public Result signOff(){
         Integer id = ThreadLocalUtil.getCurrentIdS();
         log.info("注销用户：{}", id);
-        
         userService.signOff(id);
         return Result.success();
     }

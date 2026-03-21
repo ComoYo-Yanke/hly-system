@@ -2,9 +2,6 @@ package com.hly.interceptor;
 
 
 import com.hly.constant.ErrorCodeConstant;
-import com.hly.constant.InfoConstant;
-import com.hly.constant.JwtClaimsConstant;
-import com.hly.context.BaseContext;
 import com.hly.properties.JwtProperties;
 import com.hly.utils.JwtUtil;
 import com.hly.utils.ThreadLocalUtil;
@@ -14,15 +11,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * jwt令牌校验的拦截器
