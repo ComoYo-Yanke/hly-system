@@ -115,11 +115,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public boolean signOff(Integer id){
-        
-        if(id != ThreadLocalUtil.getCurrentIdS())return false;
-        
+    public void signOff(Integer id){
         userMapper.deleteById(id);
-        return true;
     }
 }

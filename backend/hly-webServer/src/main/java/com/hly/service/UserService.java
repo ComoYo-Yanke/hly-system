@@ -18,5 +18,5 @@ public interface UserService {
     
     void logout(Integer currentIdS);
     
-    boolean signOff(Integer id);
+    void signOff(Integer id);
 }

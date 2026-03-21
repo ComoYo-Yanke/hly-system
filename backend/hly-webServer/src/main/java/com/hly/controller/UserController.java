@@ -105,16 +105,13 @@ public class UserController {
         return Result.success(pageResult);
     }
     
-    @PostMapping("/signOff/{id}")
+    @PostMapping("/signOff")
     @ApiModelProperty("注销账户")
-    public Result signOff(@PathVariable Integer id){
+    public Result signOff(){
+        Integer id = ThreadLocalUtil.getCurrentIdS();
         log.info("注销用户：{}", id);
         
-        if(userService.signOff(id)){
-            return Result.success();
-        }else{
-            return Result.error("错误！只能注销自己的账号！");
-        }
-        
+        userService.signOff(id);
+        return Result.success();
     }
 }
