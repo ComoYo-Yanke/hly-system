@@ -14,6 +14,7 @@ import com.hly.utils.RedisUtil;
 import com.hly.utils.ThreadLocalUtil;
 import com.hly.vo.UserLoginVO;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -102,5 +103,18 @@ public class UserController {
         log.info("分页查询 {}", userPageDTO);
         PageResult pageResult = userService.pageQuery(userPageDTO);
         return Result.success(pageResult);
+    }
+    
+    @PostMapping("/signOff/{id}")
+    @ApiModelProperty("注销账户")
+    public Result signOff(@PathVariable Integer id){
+        log.info("注销用户：{}", id);
+        
+        if(userService.signOff(id)){
+            return Result.success();
+        }else{
+            return Result.error("错误！只能注销自己的账号！");
+        }
+        
     }
 }

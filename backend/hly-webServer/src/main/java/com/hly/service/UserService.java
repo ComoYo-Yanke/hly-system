@@ -17,4 +17,6 @@ public interface UserService {
     PageResult pageQuery(UserPageDTO userPageDTO);
     
     void logout(Integer currentIdS);
+    
+    boolean signOff(Integer id);
 }

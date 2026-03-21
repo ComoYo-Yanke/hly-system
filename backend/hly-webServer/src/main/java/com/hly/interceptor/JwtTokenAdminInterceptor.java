@@ -78,6 +78,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             ThreadLocalUtil.setCurrentIdS(userId);
             
             // 进行后登踢先登操作
+            // TODO 后续换成websocket
             if(tokenCheckUtil.tokenIsRepeated(token)){
                 log.info("有重复登录");
                 response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
