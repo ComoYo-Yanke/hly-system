@@ -103,7 +103,7 @@ public class UserController {
         return Result.success(pageResult);
     }
     
-    @PostMapping("/signOff")
+    @PostMapping("/close")
     @ApiModelProperty("注销账户")
     public Result signOff(){
         Integer id = ThreadLocalUtil.getCurrentIdS();
