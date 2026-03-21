@@ -15,7 +15,6 @@
         <dependency>
             <groupId>com.example</groupId>
             <artifactId>hly-common</artifactId>
-
         </dependency>
 
         <dependency>
