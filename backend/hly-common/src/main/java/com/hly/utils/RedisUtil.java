@@ -32,7 +32,7 @@ public class RedisUtil {
      * @return
      */
     public String getToken(Integer id) {
-        return redisTemplate.opsForValue().get("login:token:" + id.toString()).toString();
+        return redisTemplate.opsForValue().get("login:token:" + id.toString());
     }
     
     /**

@@ -42,6 +42,7 @@ public class UserController {
         
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.ID, user.getId());
+        log.info("登录用户：{}",user.getId());
         
         String token = JwtUtil.createJWT(3, claims);
         
@@ -75,6 +76,8 @@ public class UserController {
     @PostMapping("/logout")
     @ApiModelProperty("登出")
     public Result<String> logout() {
+        log.info("登出：{}", ThreadLocalUtil.getCurrentIdS());
+        userService.logout(ThreadLocalUtil.getCurrentIdS());
         return Result.success();
     }
     

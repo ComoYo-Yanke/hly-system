@@ -30,6 +30,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    RedisUtil redisUtil;
     
     @Override
     public User login(UserLoginDTO userLoginDTO) {
@@ -103,5 +105,10 @@ public class UserServiceImpl implements UserService {
         List<User> records = page.getResult();
         
         return new PageResult(total, records);
+    }
+    
+    @Override
+    public void logout(Integer currentIdS){
+        redisUtil.deleteToken(currentIdS);
     }
 }

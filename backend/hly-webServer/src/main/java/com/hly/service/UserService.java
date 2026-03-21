@@ -15,4 +15,6 @@ public interface UserService {
     void update(UserUpdateDTO userUpdateDTO);
     
     PageResult pageQuery(UserPageDTO userPageDTO);
+    
+    void logout(Integer currentIdS);
 }
