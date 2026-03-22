@@ -76,15 +76,14 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
                 response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
                 return false;
             }
+            if(!tokenCheckUtil.tokenIsExist(userId, token))return false;
             
-            ThreadLocalUtil.setCurrentIdS(JwtUtil.getUserIdByToken(token));
             //3、通过，放行
             log.info("令牌合法，放行");
             return true;
         } catch (Exception ex) {
             //4、不通过，响应401状态码
             log.info("令牌校验时出错了:{}",ex.getMessage());
-//            throw ex;
             response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
             return false;
         }

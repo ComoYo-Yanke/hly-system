@@ -21,4 +21,12 @@ public class TokenCheckUtil {
         if(!JwtUtil.twoOfTokensIsEqual(currentToken, redisToken))return true;
         else return false;
     }
+    
+    public boolean tokenIsExist(Integer id, String currentToken){
+        if(redisUtil.getToken(id) == null || redisUtil.getToken(id) == "") return false;
+        if(redisUtil.getToken(id).equals(currentToken)) return true;
+        else return false;
+        
+        
+    }
 }
