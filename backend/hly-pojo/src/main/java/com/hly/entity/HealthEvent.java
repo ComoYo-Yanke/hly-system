@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class HealthEvent {
     private Integer id;
     private Integer userId;
-    private EventType eventType;
+    private String eventType;
     private String content;
     private LocalDateTime eventTime;
     @ApiModelProperty("是公开的")
