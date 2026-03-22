@@ -10,6 +10,8 @@ import com.hly.service.UserService;
 import com.hly.utils.JwtUtil;
 import com.hly.dto.UserLoginDTO;
 import com.hly.entity.User;
+import com.hly.utils.RedisUtil;
+import com.hly.utils.ThreadLocalUtil;
 import com.hly.vo.UserLoginVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private JwtProperties jwtProperties;
+    @Autowired
+    private RedisUtil redisUtil;
     
     @PostMapping("/login")
     @ApiModelProperty("用户登录")
@@ -37,11 +41,9 @@ public class UserController {
         
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.ID, user.getId());
+        log.info("登录用户：{}",user.getId());
         
-        String token = JwtUtil.createJWT(
-                3,
-                claims);
-        
+        String token = JwtUtil.createJWT(3, claims);
         
         UserLoginVO userLoginVO = UserLoginVO.builder()
                 .id(user.getId())
@@ -50,6 +52,9 @@ public class UserController {
                 .token(token)
                 .build();
         
+        // 将当前用户id以及 token 存入redis
+        ThreadLocalUtil.setCurrentIdS(userLoginVO.getId());
+        redisUtil.setToken(userLoginVO.getId(), userLoginVO.getToken());
         return Result.success(userLoginVO);
     }
     
@@ -70,11 +75,15 @@ public class UserController {
     @PostMapping("/logout")
     @ApiModelProperty("登出")
     public Result<String> logout() {
+        log.info("登出：{}", ThreadLocalUtil.getCurrentIdS());
+        userService.logout(ThreadLocalUtil.getCurrentIdS());
         return Result.success();
     }
     
     @GetMapping("/test")
     public Result<String> test(){
+        System.out.println(ThreadLocalUtil.getCurrentIdS());
+        
         return Result.success("test");
     }
     
@@ -92,5 +101,14 @@ public class UserController {
         log.info("分页查询 {}", userPageDTO);
         PageResult pageResult = userService.pageQuery(userPageDTO);
         return Result.success(pageResult);
+    }
+    
+    @PostMapping("/close")
+    @ApiModelProperty("注销账户")
+    public Result signOff(){
+        Integer id = ThreadLocalUtil.getCurrentIdS();
+        log.info("注销用户：{}", id);
+        userService.signOff(id);
+        return Result.success();
     }
 }

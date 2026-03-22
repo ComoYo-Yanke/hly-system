@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.hly.dto.UserPageDTO;
 import com.hly.entity.User;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -22,4 +23,10 @@ public interface UserMapper {
     void updateById(User user);
     
     Page<User> pageQuery(UserPageDTO userPageDTO);
+    
+    @Select("select * from user where id = #{id} limit 1")
+    User getByUserId(Integer id);
+    
+    @Delete("delete from user where id = #{id}")
+    void deleteById(Integer id);
 }

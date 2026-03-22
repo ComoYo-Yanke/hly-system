@@ -14,6 +14,7 @@ import com.hly.entity.User;
 import com.hly.mapper.UserMapper;
 import com.hly.result.PageResult;
 import com.hly.service.UserService;
+import com.hly.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    RedisUtil redisUtil;
     
     @Override
     public User login(UserLoginDTO userLoginDTO) {
@@ -51,6 +54,8 @@ public class UserServiceImpl implements UserService {
             //账号被锁定
             throw new AccountLockedException(InfoConstant.ACCOUNT_LOCKED);
         }
+        
+        
         return user;
     }
     
@@ -99,5 +104,16 @@ public class UserServiceImpl implements UserService {
         List<User> records = page.getResult();
         
         return new PageResult(total, records);
+    }
+    
+    @Override
+    public void logout(Integer currentIdS){
+        redisUtil.deleteToken(currentIdS);
+    }
+    
+    @Override
+    public void signOff(Integer id){
+        userMapper.deleteById(id);
+        redisUtil.deleteToken(id);
     }
 }

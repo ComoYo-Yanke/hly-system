@@ -1,4 +1,4 @@
-package com.hly.hanlder;
+package com.hly.controller.hanlder;
 
 import com.hly.constant.ErrorCodeConstant;
 import com.hly.constant.InfoConstant;
@@ -66,6 +66,7 @@ public class GlobalExceptionHandler {
 //        return Result.error(InfoConstant.UNKNOWN_ERROR);
 //    }
 
+    @ExceptionHandler
     public Result notFoundHandler(NotFoundException e){
         log.error("异常:{}", e.getMessage());
         return Result.error(InfoConstant.NOT_FOUND_RESOURCE);

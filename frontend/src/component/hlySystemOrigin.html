@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>健康管理系统 | 悦享生活</title>
+    <!-- 引入 Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- 使用现代简洁风格 -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        /* 主容器 */
+        .app-container {
+            width: 100%;
+            max-width: 1280px;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background: #ffffff;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e9edf2;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2b7a4b, #1e5a3a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .logo i {
+            color: #2b7a4b;
+            margin-right: 8px;
+            background: none;
+            -webkit-background-clip: unset;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 18px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #2c3e4e;
+        }
+
+        .nav-btn.active {
+            background: #eef3ec;
+            color: #1e6f3f;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover:not(.logout-btn) {
+            background: #eef2f5;
+        }
+
+        .logout-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .logout-btn:hover {
+            background: #fecaca;
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            flex: 1;
+            padding: 32px;
+            background: #fefefe;
+            overflow-y: auto;
+        }
+
+        /* 卡片样式 */
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border: 1px solid #eef2f6;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 4px solid #2b7a4b;
+            padding-left: 16px;
+        }
+
+        /* 表单 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e4e;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d0d9e4;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            background: #fff;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2b7a4b;
+            box-shadow: 0 0 0 3px rgba(43, 122, 75, 0.1);
+        }
+
+        button {
+            background: #2b7a4b;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button.secondary {
+            background: #eef2f6;
+            color: #1f2e3a;
+        }
+
+        button.danger {
+            background: #dc2626;
+        }
+
+        button.small {
+            padding: 6px 16px;
+            font-size: 0.8rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .event-item, .remind-item {
+            background: #fafcff;
+            border: 1px solid #eef2fa;
+            border-radius: 20px;
+            padding: 16px;
+            transition: 0.1s;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            background: #e9f4ef;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #1e6f3f;
+        }
+
+        .text-muted {
+            color: #6c7a89;
+            font-size: 0.8rem;
+        }
+
+        .mt-3 {
+            margin-top: 12px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        /* 登录注册表单中心 */
+        .auth-box {
+            max-width: 420px;
+            margin: 40px auto;
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: fadeIn 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px);}
+            to { opacity: 1; transform: translateX(-50%) translateY(0);}
+        }
+    </style>
+</head>
+<body>
+<div class="app-container" id="app">
+    <!-- 动态导航栏 -->
+    <div class="navbar">
+        <div class="logo"><i class="fas fa-leaf"></i> 悦康·健康管理系统</div>
+        <div class="nav-links" id="navLinks"></div>
+    </div>
+    <div class="main-content" id="pageContent"></div>
+</div>
+
+<script>
+    // ---------- 模拟存储 & 全局状态 ----------
+    // 当前登录用户token (模拟)
+    let authToken = localStorage.getItem('health_token') || null;
+    let currentUser = null;  // 存储用户基本信息 {id, username}
+
+    // 模拟数据库 (前端demo存储，模拟接口延迟)
+    // 用户列表
+    let users = JSON.parse(localStorage.getItem('mock_users')) || [
+        { id: 1, username: 'zhang', password: '123456', avatar: '', name: '张健康', gender: 1, followersCount: 2, followingCount: 1 },
+        { id: 2, username: 'li', password: '123456', avatar: '', name: '李运动', gender: 2, followersCount: 1, followingCount: 0 },
+        { id: 3, username: 'wang', password: '123456', avatar: '', name: '王自律', gender: 1, followersCount: 0, followingCount: 1 }
+    ];
+    // 健康事件表
+    let healthEvents = JSON.parse(localStorage.getItem('mock_events')) || [
+        { id: 1, userId: 1, eventType: '运动', content: '晨跑5公里', eventTime: '2025-03-21 07:30:00', isPublic: 1 },
+        { id: 2, userId: 1, eventType: '睡眠', content: '深度睡眠7.5小时', eventTime: '2025-03-20 23:00:00', isPublic: 1 },
+        { id: 3, userId: 2, eventType: '运动', content: '健身房力量训练', eventTime: '2025-03-21 18:00:00', isPublic: 1 },
+    ];
+    // 健康提醒表
+    let healthReminds = JSON.parse(localStorage.getItem('mock_reminds')) || [
+        { id: 1, userId: 1, remindType: '喝水', remindTime: '09:00', content: '起床后喝一杯温水', repeatType: 'daily', isActive: 1 },
+        { id: 2, userId: 1, remindType: '运动', remindTime: '17:30', content: '傍晚散步30分钟', repeatType: 'daily', isActive: 1 }
+    ];
+    // 关注关系: { id, followerId, followeeId }
+    let follows = JSON.parse(localStorage.getItem('mock_follows')) || [
+        { id: 1, followerId: 1, followeeId: 2 },
+        { id: 2, followerId: 2, followeeId: 1 },
+        { id: 3, followerId: 3, followeeId: 1 }
+    ];
+
+    // 辅助函数: 保存数据到localStorage
+    function persistData() {
+        localStorage.setItem('mock_users', JSON.stringify(users));
+        localStorage.setItem('mock_events', JSON.stringify(healthEvents));
+        localStorage.setItem('mock_reminds', JSON.stringify(healthReminds));
+        localStorage.setItem('mock_follows', JSON.stringify(follows));
+    }
+
+    // 通用提示
+    function showToast(msg, isError = false) {
+        let toastDiv = document.createElement('div');
+        toastDiv.className = 'toast-msg';
+        toastDiv.style.background = isError ? '#c2410c' : '#2b7a4b';
+        toastDiv.innerText = msg;
+        document.body.appendChild(toastDiv);
+        setTimeout(() => toastDiv.remove(), 2500);
+    }
+
+    // 模拟API延迟
+    const delay = (ms = 300) => new Promise(resolve => setTimeout(resolve, ms));
+
+    // ---------- 模拟接口实现 (基于前端数据) ----------
+    const API = {
+        // 登录
+        async login(username, password) {
+            await delay();
+            const user = users.find(u => u.username === username && u.password === password);
+            if (!user) throw new Error('用户名或密码错误');
+            const token = `mock_jwt_${user.id}_${Date.now()}`;
+            localStorage.setItem('health_token', token);
+            authToken = token;
+            currentUser = { id: user.id, username: user.username, name: user.name };
+            return { token, user: currentUser };
+        },
+        // 注册
+        async register(username, password) {
+            await delay();
+            if (users.find(u => u.username === username)) throw new Error('用户名已存在');
+            const newId = users.length ? Math.max(...users.map(u => u.id)) + 1 : 4;
+            const newUser = { id: newId, username, password, avatar: '', name: username, gender: 1, followersCount: 0, followingCount: 0 };
+            users.push(newUser);
+            persistData();
+            return { success: true };
+        },
+        // 退出
+        async logout() {
+            localStorage.removeItem('health_token');
+            authToken = null;
+            currentUser = null;
+        },
+        // 获取当前用户信息
+        async getMyInfo() {
+            if (!currentUser) throw new Error('未登录');
+            const user = users.find(u => u.id === currentUser.id);
+            const followingCount = follows.filter(f => f.followerId === currentUser.id).length;
+            const followersCount = follows.filter(f => f.followeeId === currentUser.id).length;
+            return { ...user, followingCount, followersCount };
+        },
+        // 新增健康事件
+        async addEvent(event) {
+            if (!currentUser) throw new Error('未登录');
+            const newId = healthEvents.length ? Math.max(...healthEvents.map(e => e.id)) + 1 : 100;
+            const newEvent = { id: newId, userId: currentUser.id, ...event };
+            healthEvents.push(newEvent);
+            persistData();
+            return newEvent;
+        },
+        // 获取当前用户事件列表
+        async getMyEvents(params = {}) {
+            if (!currentUser) throw new Error('未登录');
+            let list = healthEvents.filter(e => e.userId === currentUser.id);
+            if (params.eventType) list = list.filter(e => e.eventType === params.eventType);
+            if (params.startTime) list = list.filter(e => e.eventTime >= params.startTime);
+            if (params.endTime) list = list.filter(e => e.eventTime <= params.endTime);
+            list.sort((a,b)=>b.eventTime.localeCompare(a.eventTime));
+            const page = params.page || 1;
+            const size = params.size || 10;
+            const total = list.length;
+            const start = (page-1)*size;
+            const paged = list.slice(start, start+size);
+            return { total, list: paged };
+        },
+        // 删除事件
+        async deleteEvent(eventId) {
+            healthEvents = healthEvents.filter(e => !(e.id === eventId && e.userId === currentUser.id));
+            persistData();
+        },
+        // 更新事件
+        async updateEvent(eventId, updateData) {
+            const idx = healthEvents.findIndex(e => e.id === eventId && e.userId === currentUser.id);
+            if (idx !== -1) { healthEvents[idx] = { ...healthEvents[idx], ...updateData }; persistData(); }
+        },
+        // 提醒增删改查
+        async getReminds() {
+            if (!currentUser) return { total:0, list:[] };
+            let list = healthReminds.filter(r => r.userId === currentUser.id);
+            return { total: list.length, list };
+        },
+        async addRemind(remind) {
+            const newId = healthReminds.length ? Math.max(...healthReminds.map(r=>r.id))+1 : 50;
+            const newRemind = { id: newId, userId: currentUser.id, ...remind };
+            healthReminds.push(newRemind);
+            persistData();
+            return newRemind;
+        },
+        async updateRemind(id, data) {
+            const idx = healthReminds.findIndex(r => r.id === id && r.userId === currentUser.id);
+            if(idx !== -1) { healthReminds[idx] = { ...healthReminds[idx], ...data }; persistData(); }
+        },
+        async deleteRemind(id) {
+            healthReminds = healthReminds.filter(r => !(r.id === id && r.userId === currentUser.id));
+            persistData();
+        },
+        // 健康推荐 (基于事件简单生成)
+        async getRecommendations() {
+            if (!currentUser) return [];
+            const myEvents = healthEvents.filter(e => e.userId === currentUser.id);
+            const sportDays = myEvents.filter(e => e.eventType === '运动').length;
+            let rec = [];
+            if (sportDays < 3) rec.push({ type: '运动', content: '本周运动较少，建议每日坚持30分钟有氧运动，增强心肺功能' });
+            else rec.push({ type: '运动', content: '继续保持运动习惯，注意拉伸避免损伤' });
+            const sleepEvent = myEvents.find(e => e.eventType === '睡眠');
+            if (!sleepEvent) rec.push({ type: '睡眠', content: '记录睡眠可以帮助改善作息，建议今晚11点前入睡' });
+            else rec.push({ type: '睡眠', content: '优质睡眠是健康基石，睡前远离电子设备' });
+            rec.push({ type: '喝水', content: '每日饮水1.5~2升，定时提醒自己喝水' });
+            return rec;
+        },
+        // 关注/取消, 查询用户公开事件
+        async followUser(targetUserId) {
+            if(currentUser.id === targetUserId) throw new Error('不能关注自己');
+            const exists = follows.find(f => f.followerId === currentUser.id && f.followeeId === targetUserId);
+            if(!exists) {
+                const newId = follows.length+1;
+                follows.push({ id: newId, followerId: currentUser.id, followeeId: targetUserId });
+                persistData();
+            }
+        },
+        async unfollowUser(targetUserId) {
+            follows = follows.filter(f => !(f.followerId === currentUser.id && f.followeeId === targetUserId));
+            persistData();
+        },
+        async getUserPublicEvents(userId, page=1, size=10) {
+            let events = healthEvents.filter(e => e.userId === userId && e.isPublic === 1);
+            events.sort((a,b)=>b.eventTime.localeCompare(a.eventTime));
+            const start = (page-1)*size;
+            const list = events.slice(start, start+size);
+            return { total: events.length, list };
+        },
+        async searchUserByUsername(username) {
+            return users.filter(u => u.username.includes(username) && u.id !== currentUser?.id);
+        },
+        async getFollowingList() {
+            const followRelations = follows.filter(f => f.followerId === currentUser.id);
+            const followingUsers = followRelations.map(f => users.find(u => u.id === f.followeeId)).filter(Boolean);
+            return followingUsers;
+        }
+    };
+
+    // 页面渲染核心
+    let currentPage = 'login'; // login, register, events, reminds, recommend, profile
+
+    // 路由 & 渲染函数
+    function render() {
+        if (!authToken || !currentUser) {
+            // 未登录展示登录注册二选一
+            if (currentPage === 'register') renderRegister();
+            else renderLogin();
+            renderNavForGuest();
+        } else {
+            renderNavForAuth();
+            if (currentPage === 'events') renderEventsPage();
+            else if (currentPage === 'reminds') renderRemindsPage();
+            else if (currentPage === 'recommend') renderRecommendPage();
+            else if (currentPage === 'profile') renderProfilePage();
+            else renderEventsPage(); // 默认健康事件
+        }
+    }
+
+    function renderNavForGuest() {
+        const navDiv = document.getElementById('navLinks');
+        navDiv.innerHTML = `
+            <button class="nav-btn ${currentPage === 'login' ? 'active' : ''}" data-page="login">登录</button>
+            <button class="nav-btn ${currentPage === 'register' ? 'active' : ''}" data-page="register">注册</button>
+        `;
+        document.querySelectorAll('[data-page]').forEach(btn => {
+            btn.addEventListener('click', (e) => { currentPage = btn.dataset.page; render(); });
+        });
+    }
+
+    function renderNavForAuth() {
+        const navDiv = document.getElementById('navLinks');
+        navDiv.innerHTML = `
+            <button class="nav-btn ${currentPage === 'events' ? 'active' : ''}" data-page="events"><i class="fas fa-calendar-alt"></i> 健康事件</button>
+            <button class="nav-btn ${currentPage === 'reminds' ? 'active' : ''}" data-page="reminds"><i class="fas fa-bell"></i> 健康提醒</button>
+            <button class="nav-btn ${currentPage === 'recommend' ? 'active' : ''}" data-page="recommend"><i class="fas fa-lightbulb"></i> 健康推荐</button>
+            <button class="nav-btn ${currentPage === 'profile' ? 'active' : ''}" data-page="profile"><i class="fas fa-user-circle"></i> 个人中心</button>
+            <button class="nav-btn logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 退出</button>
+        `;
+        document.querySelectorAll('[data-page]').forEach(btn => {
+            btn.addEventListener('click', (e) => { currentPage = btn.dataset.page; render(); });
+        });
+        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+            await API.logout();
+            authToken = null; currentUser = null;
+            currentPage = 'login';
+            render();
+            showToast('已退出登录');
+        });
+    }
+
+    // 登录页面
+    function renderLogin() {
+        const container = document.getElementById('pageContent');
+        container.innerHTML = `
+            <div class="auth-box card">
+                <h2 style="text-align:center; margin-bottom:24px;">登录账户</h2>
+                <div class="form-group"><label>用户名</label><input id="loginUsername" placeholder="用户名" value="zhang"></div>
+                <div class="form-group"><label>密码</label><input id="loginPassword" type="password" placeholder="密码" value="123456"></div>
+                <button id="doLoginBtn" style="width:100%">登录</button>
+                <p class="text-muted" style="text-align:center; margin-top:16px;">测试账号: zhang/123456 或 li/123456</p>
+            </div>
+        `;
+        document.getElementById('doLoginBtn')?.addEventListener('click', async () => {
+            const un = document.getElementById('loginUsername').value;
+            const pw = document.getElementById('loginPassword').value;
+            try {
+                const res = await API.login(un, pw);
+                showToast(`欢迎回来, ${res.user.username}`);
+                currentPage = 'events';
+                render();
+            } catch(e) { showToast(e.message, true); }
+        });
+    }
+
+    function renderRegister() {
+        const container = document.getElementById('pageContent');
+        container.innerHTML = `
+            <div class="auth-box card">
+                <h2 style="text-align:center; margin-bottom:24px;">注册新账号</h2>
+                <div class="form-group"><label>用户名</label><input id="regUsername" placeholder="用户名"></div>
+                <div class="form-group"><label>密码</label><input id="regPassword" type="password" placeholder="密码"></div>
+                <button id="doRegBtn" style="width:100%">注册</button>
+            </div>
+        `;
+        document.getElementById('doRegBtn')?.addEventListener('click', async () => {
+            const un = document.getElementById('regUsername').value;
+            const pw = document.getElementById('regPassword').value;
+            if(!un || !pw) return showToast('用户名密码不能为空', true);
+            try {
+                await API.register(un, pw);
+                showToast('注册成功，请登录');
+                currentPage = 'login';
+                render();
+            } catch(e) { showToast(e.message, true); }
+        });
+    }
+
+    // 健康事件页
+    async function renderEventsPage() {
+        const container = document.getElementById('pageContent');
+        container.innerHTML = `<div class="card"><div class="flex-between"><div class="card-title"><i class="fas fa-running"></i> 我的健康事件</div><button id="newEventBtn">+ 新增事件</button></div><div id="eventsList"></div><div class="pagination" id="eventsPagination"></div></div>`;
+        let page = 1;
+        const loadEvents = async () => {
+            const { list, total } = await API.getMyEvents({ page, size: 6 });
+            const html = `<div class="grid-2">${list.map(ev => `
+                <div class="event-item">
+                    <div class="flex-between"><span class="badge">${ev.eventType}</span><span class="text-muted">${ev.eventTime.slice(0,10)}</span></div>
+                    <p style="margin:12px 0">${ev.content || '无详情'}</p>
+                    <div class="flex-between"><span>${ev.isPublic === 1 ? '🌍 公开' : '🔒 私密'}</span><div><button class="small secondary edit-event" data-id="${ev.id}" data-type="${ev.eventType}" data-content="${ev.content?.replace(/"/g, '&quot;')}" data-time="${ev.eventTime}" data-public="${ev.isPublic}">编辑</button><button class="small danger delete-event" data-id="${ev.id}">删除</button></div></div>
+                </div>`).join('')}</div>`;
+            document.getElementById('eventsList').innerHTML = html || '<p>暂无事件，点击新增记录健康</p>';
+            document.querySelectorAll('.delete-event').forEach(btn => btn.addEventListener('click', async (e) => {
+                const id = parseInt(btn.dataset.id); await API.deleteEvent(id); await loadEvents(); showToast('已删除');
+            }));
+            document.querySelectorAll('.edit-event').forEach(btn => btn.addEventListener('click', async () => {
+                const id = parseInt(btn.dataset.id); const newContent = prompt('修改内容', btn.dataset.content); if(newContent !== null) await API.updateEvent(id, { content: newContent }); await loadEvents();
+            }));
+        };
+        document.getElementById('newEventBtn')?.addEventListener('click', () => {
+            const type = prompt('事件类型(运动/睡眠/喝水/其他)', '运动');
+            if(!type) return;
+            const content = prompt('事件内容', '记录健康');
+            const isPublic = confirm('是否公开?') ? 1 : 0;
+            const now = new Date().toISOString().slice(0,19).replace('T', ' ');
+            API.addEvent({ eventType: type, content, eventTime: now, isPublic }).then(()=>{ loadEvents(); showToast('添加成功'); });
+        });
+        await loadEvents();
+    }
+
+    // 健康提醒设置页
+    async function renderRemindsPage() {
+        const container = document.getElementById('pageContent');
+        container.innerHTML = `<div class="card"><div class="flex-between"><div class="card-title"><i class="fas fa-clock"></i> 健康提醒</div><button id="addRemindBtn">+ 新增提醒</button></div><div id="remindList"></div></div>`;
+        const loadReminds = async () => {
+            const { list } = await API.getReminds();
+            document.getElementById('remindList').innerHTML = list.map(r => `
+                <div class="remind-item flex-between" style="margin-bottom:12px;">
+                    <div><strong>${r.remindType}</strong> ${r.remindTime} — ${r.content}<br><span class="text-muted">重复: ${r.repeatType} 状态: ${r.isActive ? '启用' : '禁用'}</span></div>
+                    <div><button class="small secondary edit-remind" data-id="${r.id}" data-type="${r.remindType}" data-time="${r.remindTime}" data-content="${r.content}" data-repeat="${r.repeatType}" data-active="${r.isActive}">编辑</button><button class="small danger del-remind" data-id="${r.id}">删除</button></div>
+                </div>`).join('') || '<p>暂无提醒，添加一个吧</p>';
+            document.querySelectorAll('.del-remind').forEach(btn => btn.addEventListener('click', async (e) => { await API.deleteRemind(parseInt(btn.dataset.id)); loadReminds(); showToast('删除成功'); }));
+            document.querySelectorAll('.edit-remind').forEach(btn => btn.addEventListener('click', async () => {
+                const id = parseInt(btn.dataset.id);
+                const newTime = prompt('新提醒时间 HH:mm', btn.dataset.time);
+                if(newTime) await API.updateRemind(id, { remindTime: newTime }); loadReminds();
+            }));
+        };
+        document.getElementById('addRemindBtn')?.addEventListener('click', async () => {
+            const type = prompt('提醒类型(喝水/运动/吃药)', '喝水'); if(!type) return;
+            const time = prompt('提醒时间 (HH:mm)', '09:00'); if(!time) return;
+            const content = prompt('提醒内容', '记得健康生活');
+            await API.addRemind({ remindType: type, remindTime: time, content, repeatType: 'daily', isActive: 1 });
+            loadReminds(); showToast('提醒已添加');
+        });
+        await loadReminds();
+    }
+
+    // 健康推荐
+    async function renderRecommendPage() {
+        const recs = await API.getRecommendations();
+        const container = document.getElementById('pageContent');
+        container.innerHTML = `<div class="card"><div class="card-title"><i class="fas fa-chalkboard-user"></i> 智能健康推荐</div><div class="grid-2">${recs.map(r => `<div class="event-item"><h3>📌 ${r.type}</h3><p>${r.content}</p></div>`).join('')}</div></div>`;
+    }
+
+    // 个人中心 (含关注、查询其他用户公开事件)
+    async function renderProfilePage() {
+        const userInfo = await API.getMyInfo();
+        const following = await API.getFollowingList();
+        const container = document.getElementById('pageContent');
+        container.innerHTML = `
+            <div class="card"><div class="card-title"><i class="fas fa-user"></i> 个人档案</div><p><strong>用户名:</strong> ${userInfo.username}</p><p><strong>昵称:</strong> ${userInfo.name}</p><p><strong>关注数:</strong> ${userInfo.followingCount} | <strong>粉丝数:</strong> ${userInfo.followersCount}</p></div>
+            <div class="card"><div class="card-title"><i class="fas fa-users"></i> 我关注的人</div><div id="followList"></div></div>
+            <div class="card"><div class="card-title"><i class="fas fa-search"></i> 通过用户ID/用户名查看公开动态</div><div class="form-group"><input id="searchUserId" placeholder="输入用户名或ID"></div><button id="searchUserBtn">查询并关注</button><div id="otherEvents" class="mt-3"></div></div>
+        `;
+        const followDiv = document.getElementById('followList');
+        followDiv.innerHTML = following.map(f => `<div class="flex-between"><span>${f.username}</span><button class="small secondary unfollowBtn" data-id="${f.id}">取消关注</button></div>`).join('') || '暂无关注';
+        document.querySelectorAll('.unfollowBtn').forEach(btn => btn.addEventListener('click', async (e) => {
+            const uid = parseInt(btn.dataset.id); await API.unfollowUser(uid); renderProfilePage(); showToast('已取消关注');
+        }));
+        document.getElementById('searchUserBtn')?.addEventListener('click', async () => {
+            const kw = document.getElementById('searchUserId').value;
+            const targetUser = users.find(u => u.username === kw || u.id == kw);
+            if(!targetUser) { showToast('用户不存在', true); return; }
+            const isFollowing = follows.some(f => f.followerId === currentUser.id && f.followeeId === targetUser.id);
+            const eventsRes = await API.getUserPublicEvents(targetUser.id, 1, 5);
+            const eventsHtml = eventsRes.list.map(ev => `<div class="event-item">${ev.eventType} - ${ev.content || '无'} (${ev.eventTime.slice(0,10)})</div>`).join('');
+            document.getElementById('otherEvents').innerHTML = `<div><strong>${targetUser.username} 的动态</strong> ${!isFollowing ? `<button id="followActionBtn" data-id="${targetUser.id}">➕ 关注</button>` : `<button id="unfollowActionBtn" data-id="${targetUser.id}">❌ 取消关注</button>`}</div><div>${eventsHtml || '暂无公开事件'}</div>`;
+            document.getElementById('followActionBtn')?.addEventListener('click', async () => { await API.followUser(targetUser.id); renderProfilePage(); showToast('已关注'); });
+            document.getElementById('unfollowActionBtn')?.addEventListener('click', async () => { await API.unfollowUser(targetUser.id); renderProfilePage(); showToast('已取消'); });
+        });
+    }
+
+    // 初始化渲染
+    render();
+    persistData(); // 确保初始数据同步
+</script>
+</body>
+</html>
