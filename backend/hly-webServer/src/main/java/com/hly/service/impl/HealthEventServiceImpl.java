@@ -9,6 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @Slf4j
 public class HealthEventServiceImpl implements HealthEventService {
@@ -21,5 +23,8 @@ public class HealthEventServiceImpl implements HealthEventService {
         HealthEvent healthEvent = new HealthEvent();
         BeanUtils.copyProperties(healthEventInsertDTO, healthEvent);
         
+        healthEvent.setCreatedTime(LocalDateTime.now());
+        healthEvent.setUpdatedTime(LocalDateTime.now());
+        healthEventMapper.insert(healthEvent);
     }
 }

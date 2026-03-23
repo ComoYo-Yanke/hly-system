@@ -76,7 +76,10 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
                 response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
                 return false;
             }
-            if(!tokenCheckUtil.tokenIsExist(userId, token))return false;
+            if(!tokenCheckUtil.tokenIsExist(userId, token)){
+                log.info("用户并未登录！");
+                return false;
+            }
             
             //3、通过，放行
             log.info("令牌合法，放行");
