@@ -2,6 +2,8 @@ package com.hly.constant;
 
 import lombok.Data;
 
+import javax.management.relation.InvalidRelationTypeException;
+
 
 @Data
 public class InfoConstant {
@@ -17,4 +19,9 @@ public class InfoConstant {
     public static final String ACCOUNT_LOCKED = "账户被禁用";
     public static final String UNKNOWN_ERROR = "未知错误";
     public static final String NOT_FOUND_RESOURCE = "用户访问资源不存在";
+    
+    public static final Integer GENDER_MAN = 1;
+    public static final Integer GENDER_WOMAN = 2;
+    public static final Integer ROLE_NORMAL = 0;
+    public static final Integer ROLE_ADMIN = 1;
 }

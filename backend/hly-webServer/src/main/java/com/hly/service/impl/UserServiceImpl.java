@@ -15,6 +15,7 @@ import com.hly.mapper.UserMapper;
 import com.hly.result.PageResult;
 import com.hly.service.UserService;
 import com.hly.utils.RedisUtil;
+import com.hly.vo.UserQueryVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +71,10 @@ public class UserServiceImpl implements UserService {
         user.setUpdatedTime(LocalDateTime.now());
         user.setName(userLoginDTO.getUsername());  // 初始姓名与账号（username）相同
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-        user.setRole(0);
-        user.setGender(1);
+        user.setRole(InfoConstant.ROLE_NORMAL); // 初始角色 默认为普通用户
+        user.setGender(InfoConstant.GENDER_MAN); // 初始性别 默认为男
+        user.setBio(null);
+        user.setEmail(null);
         // TODO 后续添加默认初始头像
         user.setAvatar(null);
         
@@ -115,5 +118,14 @@ public class UserServiceImpl implements UserService {
     public void signOff(Integer id){
         userMapper.deleteById(id);
         redisUtil.deleteToken(id);
+    }
+    
+    @Override
+    public UserQueryVO queryById(Integer id){
+        UserQueryVO userQueryVO = new UserQueryVO();
+        User user = userMapper.query(id);
+        BeanUtils.copyProperties(user, userQueryVO);
+        
+        return userQueryVO;
     }
 }

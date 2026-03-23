@@ -13,10 +13,12 @@ import com.hly.entity.User;
 import com.hly.utils.RedisUtil;
 import com.hly.utils.ThreadLocalUtil;
 import com.hly.vo.UserLoginVO;
+import com.hly.vo.UserQueryVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -110,5 +112,14 @@ public class UserController {
         log.info("注销用户：{}", id);
         userService.signOff(id);
         return Result.success();
+    }
+    
+    @GetMapping("/{id}")
+    @ApiModelProperty("根据id获取用户基本信息")
+    public Result<UserQueryVO> queryUserById(@PathVariable Integer id){
+        log.info("查询员工基本信息：{}", id);
+        UserQueryVO userQueryVO = userService.queryById(id);
+        
+        return Result.success(userQueryVO);
     }
 }
