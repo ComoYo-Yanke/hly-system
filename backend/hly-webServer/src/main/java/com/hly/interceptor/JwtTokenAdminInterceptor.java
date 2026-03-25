@@ -7,6 +7,7 @@ import com.hly.utils.JwtUtil;
 import com.hly.utils.ThreadLocalUtil;
 import com.hly.utils.TokenCheckUtil;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.rmi.server.ExportException;
 
 
 /**
@@ -38,7 +41,8 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
      * @throws Exception
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
         
         //判断当前拦截到的是Controller的方法还是其他资源
         if (!(handler instanceof HandlerMethod)) {
@@ -48,17 +52,26 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
         //1、从请求头中获取令牌
         String token = request.getHeader("token");
-        ThreadLocalUtil.setCurrentIdS(JwtUtil.getUserIdByToken(token));
         if(token == null || token.isEmpty()){
             log.info("令牌为空, 响应401000");
-            response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().write(ErrorCodeConstant.TOKEN_IS_NULL);
             return false;
         }
+        
         try{
             JwtUtil.parseJWT(token);
-        }catch (Exception e){
+        }
+        catch (ExpiredJwtException ex){
+            log.info("令牌过期, 响应401000");
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().write(ErrorCodeConstant.TOKEN_EXPIRED);
+            return false;
+        }
+        catch (Exception e){
             log.info("令牌非法, 响应401000");
-            response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().write(ErrorCodeConstant.TOKEN_IS_FALSE);
             return false;
         }
         //2、校验令牌
@@ -73,27 +86,38 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             // TODO 后续换成websocket
             if(tokenCheckUtil.tokenIsRepeated(token)){
                 log.info("有重复登录");
-                response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
+                response.setContentType("application/json;charset=utf-8");
+                response.getWriter().write(ErrorCodeConstant.IS_REPEAT_LOGIN);
                 return false;
             }
             if(!tokenCheckUtil.tokenIsExist(userId, token)){
                 log.info("用户并未登录！");
+                response.setContentType("application/json;charset=utf-8");
+                response.getWriter().write(ErrorCodeConstant.NO_LOGIN_FINALLY);
                 return false;
             }
             
             //3、通过，放行
             log.info("令牌合法，放行");
             return true;
+        } catch (ExpiredJwtException ex){
+            log.info("令牌过期, 响应401000");
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().write(ErrorCodeConstant.TOKEN_EXPIRED);
+            return false;
         } catch (Exception ex) {
             //4、不通过，响应401状态码
-            log.info("令牌校验时出错了:{}",ex.getMessage());
-            response.setStatus(ErrorCodeConstant.TOKEN_DISABLE);
+            log.info("令牌非法, 响应401000");
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().write(ErrorCodeConstant.TOKEN_IS_FALSE);
             return false;
         }
     }
     
     @Override
-    public void afterCompletion(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(jakarta.servlet.http.HttpServletRequest request,
+                                jakarta.servlet.http.HttpServletResponse response, Object handler, Exception ex)
+            throws Exception {
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
         ThreadLocalUtil.clear();
     }

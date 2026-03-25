@@ -31,4 +31,12 @@
         </where>
         order by created_time desc
     </select>
+
+    <select id="count" resultType="com.hly.vo.HealthEventCountVO">
+        select event_type,count(*) num
+        from health_event
+        where user_id = #{userId}
+            and event_time between #{startTime} and #{endTime}
+        group by event_type order by num
+    </select>
 </mapper>

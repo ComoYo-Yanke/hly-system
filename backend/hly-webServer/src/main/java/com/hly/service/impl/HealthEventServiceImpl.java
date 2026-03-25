@@ -3,15 +3,13 @@ package com.hly.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.hly.constant.DataConstant;
-import com.hly.dto.HealthEventInsertDTO;
-import com.hly.dto.HealthEventPageDTO;
-import com.hly.dto.HealthEventPageMapperDTO;
-import com.hly.dto.HealthEventUpdateDTO;
+import com.hly.dto.*;
 import com.hly.entity.HealthEvent;
 import com.hly.mapper.HealthEventMapper;
 import com.hly.result.PageResult;
 import com.hly.service.HealthEventService;
 import com.hly.utils.ThreadLocalUtil;
+import com.hly.vo.HealthEventCountVO;
 import com.hly.vo.HealthEventQueryVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -102,10 +100,26 @@ public class HealthEventServiceImpl implements HealthEventService {
         return healthEventQueryVO;
     }
     
-    
+    /**
+     * 删除健康事件
+     * @param id
+     */
     @Override
     public void delete(Integer id){
         Integer userId = ThreadLocalUtil.getCurrentIdS();
         healthEventMapper.delete(id, userId);
+    }
+    
+    /**
+     *
+     * @param healthEventCountDTO
+     * @return
+     */
+    @Override
+    public List<HealthEventCountVO> count(HealthEventCountDTO healthEventCountDTO){
+        healthEventCountDTO.setUserId(ThreadLocalUtil.getCurrentIdS());
+        List<HealthEventCountVO> list = healthEventMapper.count(healthEventCountDTO);
+        log.info("健康事件统计结果：{},{}",healthEventCountDTO,list);
+        return list;
     }
 }

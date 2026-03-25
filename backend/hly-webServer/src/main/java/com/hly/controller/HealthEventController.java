@@ -1,5 +1,6 @@
 package com.hly.controller;
 
+import com.hly.dto.HealthEventCountDTO;
 import com.hly.dto.HealthEventInsertDTO;
 import com.hly.dto.HealthEventPageDTO;
 import com.hly.dto.HealthEventUpdateDTO;
@@ -7,12 +8,15 @@ import com.hly.result.PageResult;
 import com.hly.result.Result;
 import com.hly.service.HealthEventService;
 import com.hly.utils.ThreadLocalUtil;
+import com.hly.vo.HealthEventCountVO;
 import com.hly.vo.HealthEventQueryVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/hy/event")
@@ -59,7 +63,16 @@ public class HealthEventController {
     @DeleteMapping("/{id}")
     @ApiModelProperty("根据id删除用户健康事件")
     public Result delete(@PathVariable Integer id){
+        log.info("删除用户：{}", id);
         healthEventService.delete(id);
         return Result.success();
+    }
+    
+    @GetMapping("/statistics")
+    public Result<List<HealthEventCountVO>> countOfEvent(@RequestBody HealthEventCountDTO healthEventCountDTO){
+        log.info("查询统计健康事件：{}", healthEventCountDTO);
+        List<HealthEventCountVO> list =  healthEventService.count(healthEventCountDTO);
+        
+        return Result.success(list);
     }
 }
