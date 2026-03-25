@@ -1,4 +1,4 @@
-package com.hly.controller;
+package com.hly.service.impl.controller;
 
 import com.hly.dto.HealthEventCountDTO;
 import com.hly.dto.HealthEventInsertDTO;

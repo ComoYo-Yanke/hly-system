@@ -22,4 +22,8 @@ public interface UserService {
     void signOff(Integer id);
     
     UserQueryVO queryById(Integer id);
+    
+    Integer getCurrentUserFansCount();
+    
+    Integer getCurrentUserFollowCount();
 }

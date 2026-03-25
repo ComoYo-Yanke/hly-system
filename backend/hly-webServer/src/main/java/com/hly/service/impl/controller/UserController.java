@@ -1,4 +1,4 @@
-package com.hly.controller;
+package com.hly.service.impl.controller;
 
 import com.hly.constant.JwtClaimsConstant;
 import com.hly.dto.UserPageDTO;
@@ -6,6 +6,7 @@ import com.hly.dto.UserUpdateDTO;
 import com.hly.properties.JwtProperties;
 import com.hly.result.PageResult;
 import com.hly.result.Result;
+import com.hly.service.UIXService;
 import com.hly.service.UserService;
 import com.hly.utils.JwtUtil;
 import com.hly.dto.UserLoginDTO;
@@ -124,5 +125,21 @@ public class UserController {
         if(userQueryVO == null)return Result.error("不可夺舍");
         
         return Result.success(userQueryVO);
+    }
+    
+    @GetMapping("/fan")
+    @ApiModelProperty("查询用户粉丝数量")
+    public Result<Integer> getFansCount(){
+        log.info("查询用户粉丝数");
+        Integer fansCount = userService.getCurrentUserFansCount();
+        return Result.success(fansCount);
+    }
+    
+    @GetMapping("/follow")
+    @ApiModelProperty("查询用户粉丝数量")
+    public Result<Integer> pageForFansCount(){
+        log.info("查询用户关注数");
+        Integer followCount = userService.getCurrentUserFollowCount();
+        return Result.success(followCount);
     }
 }

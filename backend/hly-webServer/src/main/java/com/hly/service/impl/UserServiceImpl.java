@@ -11,6 +11,7 @@ import com.hly.exception.AccountNotFoundException;
 import com.hly.exception.PasswordErrorException;
 import com.hly.dto.UserLoginDTO;
 import com.hly.entity.User;
+import com.hly.mapper.UIXMapper;
 import com.hly.mapper.UserMapper;
 import com.hly.result.PageResult;
 import com.hly.service.UserService;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
@@ -33,6 +35,8 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     @Autowired
     RedisUtil redisUtil;
+    @Autowired
+    UIXMapper uixMapper;
     
     /**
      * 登录
@@ -129,6 +133,7 @@ public class UserServiceImpl implements UserService {
         return new PageResult(total, records);
     }
     
+    
     /**登出
      *
      * @param currentIdS
@@ -143,7 +148,10 @@ public class UserServiceImpl implements UserService {
      * @param id
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void signOff(Integer id){
+        uixMapper.deleteById(id,null);
+        uixMapper.deleteById(null, id);
         userMapper.deleteById(id);
         redisUtil.deleteToken(id);
     }
@@ -164,5 +172,18 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(user, userQueryVO);
         
         return userQueryVO;
+    }
+    
+    @Override
+    public Integer getCurrentUserFansCount() {
+        Integer id = ThreadLocalUtil.getCurrentIdS();
+        return uixMapper.queryFansCountOnlyOne(id);
+    }
+    
+    @Override
+    public Integer getCurrentUserFollowCount() {
+        Integer id = ThreadLocalUtil.getCurrentIdS();
+        
+        return uixMapper.queryFollowCountOnlyOne(id);
     }
 }
