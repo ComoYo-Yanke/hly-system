@@ -34,6 +34,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     RedisUtil redisUtil;
     
+    /**
+     * 登录
+     * @param userLoginDTO
+     * @return
+     */
     @Override
     public User login(UserLoginDTO userLoginDTO) {
         String username = userLoginDTO.getUsername();
@@ -61,6 +66,10 @@ public class UserServiceImpl implements UserService {
         return user;
     }
     
+    /**
+     * 注册
+     * @param userLoginDTO
+     */
     @Override
     public void register(UserLoginDTO userLoginDTO) {
         User user = new User();
@@ -83,11 +92,16 @@ public class UserServiceImpl implements UserService {
         
     }
     
+    /**
+     * 更新用户信息
+     * @param userUpdateDTO
+     */
     @Override
     public void update(UserUpdateDTO userUpdateDTO){
         User user = new User();
         BeanUtils.copyProperties(userUpdateDTO, user);
         user.setUpdatedTime(LocalDateTime.now());
+        user.setId(ThreadLocalUtil.getCurrentIdS());
         
         if(!(user.getPassword() == null || user.getPassword() == "")){
             user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
@@ -96,6 +110,11 @@ public class UserServiceImpl implements UserService {
         userMapper.updateById(user);
     }
     
+    /**
+     * 用户分页查询
+     * @param userPageDTO
+     * @return
+     */
     @Override
     public PageResult pageQuery(UserPageDTO userPageDTO){
         // TODO 后续新增其他排序方式：如按照被关注总数，当前用户关注置顶
@@ -110,17 +129,30 @@ public class UserServiceImpl implements UserService {
         return new PageResult(total, records);
     }
     
+    /**登出
+     *
+     * @param currentIdS
+     */
     @Override
     public void logout(Integer currentIdS){
         redisUtil.deleteToken(currentIdS);
     }
     
+    /**注销
+     *
+     * @param id
+     */
     @Override
     public void signOff(Integer id){
         userMapper.deleteById(id);
         redisUtil.deleteToken(id);
     }
     
+    /**
+     * 根据id查询用户信息
+     * @param id
+     * @return
+     */
     @Override
     public UserQueryVO queryById(Integer id){
         UserQueryVO userQueryVO = new UserQueryVO();

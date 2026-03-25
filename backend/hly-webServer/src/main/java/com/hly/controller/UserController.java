@@ -92,7 +92,7 @@ public class UserController {
     @PutMapping
     @ApiModelProperty("更新用户基本信息")
     public Result update(@RequestBody UserUpdateDTO userUpdateDTO){
-        log.info("更新用户：{} , {}", userUpdateDTO.getId(), userUpdateDTO.getName());
+        log.info("更新用户：{} , {}", userUpdateDTO.getName());
         userService.update(userUpdateDTO);
         return Result.success();
     }

@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserUpdateDTO {
-    @ApiModelProperty("用户id")
-    private Integer id;
     @ApiModelProperty("姓名")
     private String name;
     @ApiModelProperty("密码")

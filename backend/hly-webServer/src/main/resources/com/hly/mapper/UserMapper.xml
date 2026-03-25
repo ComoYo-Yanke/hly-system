@@ -17,7 +17,6 @@
                 <if test="bio != null and bio != ''">bio = #{bio}</if>
                 <if test="email != null and email != ''">email = #{email}</if>
             </set>
-
         where id = #{id}
     </update>
     <select id="pageQuery" resultType="com.hly.entity.User">
