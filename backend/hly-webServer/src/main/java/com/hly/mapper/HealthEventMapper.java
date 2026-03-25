@@ -1,7 +1,7 @@
 package com.hly.mapper;
 
 import com.github.pagehelper.Page;
-import com.hly.dto.HealthEventPageDTO;
+import com.hly.dto.HealthEventPageMapperDTO;
 import com.hly.entity.HealthEvent;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,5 +13,5 @@ public interface HealthEventMapper {
             "#{createdTime},#{updatedTime})")
     void insert(HealthEvent healthEvent);
     
-    Page<HealthEvent> pageQuery(HealthEventPageDTO healthEventPageDTO);
+    Page<HealthEvent> pageQuery(HealthEventPageMapperDTO healthEventPageMapperDTO);
 }

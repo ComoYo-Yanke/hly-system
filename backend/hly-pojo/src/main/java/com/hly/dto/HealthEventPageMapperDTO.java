@@ -10,7 +10,9 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HealthEventPageDTO {
+public class HealthEventPageMapperDTO {
+    @ApiModelProperty("用户id")
+    private Integer userId;
     @ApiModelProperty("事件类型")
     private String eventType;
     @ApiModelProperty("事件发生时间区间")

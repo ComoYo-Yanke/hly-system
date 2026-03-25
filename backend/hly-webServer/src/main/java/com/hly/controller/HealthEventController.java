@@ -23,6 +23,7 @@ public class HealthEventController {
     @ApiModelProperty("新增健康事件")
     public Result insert(@RequestBody HealthEventInsertDTO healthEventInsertDTO){
         log.info("用户{}新增健康事件：{}", ThreadLocalUtil.getCurrentIdS(), healthEventInsertDTO);
+        
         healthEventService.insert(healthEventInsertDTO);
         return Result.success();
     }
