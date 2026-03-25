@@ -14,4 +14,6 @@ public interface HealthEventService {
     void update(HealthEventUpdateDTO healthEventUpdateDTO);
     
     HealthEventQueryVO queryById(Integer id);
+    
+    void delete(Integer id);
 }

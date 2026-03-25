@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.hly.dto.HealthEventPageMapperDTO;
 import com.hly.entity.HealthEvent;
 import com.hly.vo.HealthEventQueryVO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -22,4 +23,7 @@ public interface HealthEventMapper {
     
     @Select("select * from health_event where id = #{id} and user_id = #{userId}")
     HealthEvent queryById(Integer id, Integer userId);
+    
+    @Delete("delete from health_event where id = #{id} and user_id = #{userId}")
+    void delete(Integer id, Integer userId);
 }

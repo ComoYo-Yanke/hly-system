@@ -88,6 +88,11 @@ public class HealthEventServiceImpl implements HealthEventService {
         healthEventMapper.update(healthEvent);
     }
     
+    /**
+     * 健康事件回显
+     * @param id
+     * @return
+     */
     @Override
     public HealthEventQueryVO queryById(Integer id){
         HealthEventQueryVO healthEventQueryVO = new HealthEventQueryVO();
@@ -95,5 +100,12 @@ public class HealthEventServiceImpl implements HealthEventService {
         HealthEvent healthEvent = healthEventMapper.queryById(id, userId);
         BeanUtils.copyProperties(healthEvent, healthEventQueryVO);
         return healthEventQueryVO;
+    }
+    
+    
+    @Override
+    public void delete(Integer id){
+        Integer userId = ThreadLocalUtil.getCurrentIdS();
+        healthEventMapper.delete(id, userId);
     }
 }

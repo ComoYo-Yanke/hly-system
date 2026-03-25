@@ -56,8 +56,10 @@ public class HealthEventController {
         return Result.success(healthEventQueryVO);
     }
     
-    @DeleteMapping
-    public Result delete(){
+    @DeleteMapping("/{id}")
+    @ApiModelProperty("根据id删除用户健康事件")
+    public Result delete(@PathVariable Integer id){
+        healthEventService.delete(id);
         return Result.success();
     }
 }
