@@ -15,6 +15,7 @@ import com.hly.mapper.UserMapper;
 import com.hly.result.PageResult;
 import com.hly.service.UserService;
 import com.hly.utils.RedisUtil;
+import com.hly.utils.ThreadLocalUtil;
 import com.hly.vo.UserQueryVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -123,6 +124,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserQueryVO queryById(Integer id){
         UserQueryVO userQueryVO = new UserQueryVO();
+        if(ThreadLocalUtil.getCurrentIdS() != id) {
+            log.error("不可查询其他用户的个人信息");
+            return null;
+        }
         User user = userMapper.query(id);
         BeanUtils.copyProperties(user, userQueryVO);
         

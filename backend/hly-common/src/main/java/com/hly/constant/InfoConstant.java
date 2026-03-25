@@ -24,4 +24,6 @@ public class InfoConstant {
     public static final Integer GENDER_WOMAN = 2;
     public static final Integer ROLE_NORMAL = 0;
     public static final Integer ROLE_ADMIN = 1;
+    public static final Integer EVENT_IS_PUBLIC = 1;
+    public static final Integer EVENT_IS_PRIVATE = 0;
 }

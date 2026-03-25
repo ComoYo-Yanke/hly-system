@@ -118,7 +118,9 @@ public class UserController {
     @ApiModelProperty("根据id获取用户基本信息")
     public Result<UserQueryVO> queryUserById(@PathVariable Integer id){
         log.info("查询员工基本信息：{}", id);
+        
         UserQueryVO userQueryVO = userService.queryById(id);
+        if(userQueryVO == null)return Result.error("不可夺舍");
         
         return Result.success(userQueryVO);
     }
