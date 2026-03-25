@@ -52,18 +52,18 @@ public class UIXController {
     }
     
     @GetMapping("/fan/{id}")
-    @ApiModelProperty("获取用户的粉丝数量")
+    @ApiModelProperty("获取指定用户的粉丝数量")
     public Result<Integer> getFansCount(@PathVariable Integer id){
-        log.info("获取用户的粉丝数：{}", id);
+        log.info("获取用户{}的粉丝数", id);
         Integer count = uixService.getFansCount(id);
         
         return Result.success(count);
     }
     
     @GetMapping("/follow/{id}")
-    @ApiModelProperty("获取用户的关注数量")
+    @ApiModelProperty("获取指定用户的关注数量")
     public Result<Integer> getFollowsCount(@PathVariable Integer id){
-        log.info("获取用户的关注数：{}", id);
+        log.info("获取用户{}的关注数", id);
         Integer count = uixService.getFollowCount(id);
         
         return Result.success(count);
