@@ -11,14 +11,18 @@ import com.hly.exception.AccountNotFoundException;
 import com.hly.exception.PasswordErrorException;
 import com.hly.dto.UserLoginDTO;
 import com.hly.entity.User;
+import com.hly.mapper.UIXMapper;
 import com.hly.mapper.UserMapper;
 import com.hly.result.PageResult;
 import com.hly.service.UserService;
 import com.hly.utils.RedisUtil;
+import com.hly.utils.ThreadLocalUtil;
+import com.hly.vo.UserQueryVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
@@ -31,7 +35,14 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     @Autowired
     RedisUtil redisUtil;
+    @Autowired
+    UIXMapper uixMapper;
     
+    /**
+     * 登录
+     * @param userLoginDTO
+     * @return
+     */
     @Override
     public User login(UserLoginDTO userLoginDTO) {
         String username = userLoginDTO.getUsername();
@@ -59,6 +70,10 @@ public class UserServiceImpl implements UserService {
         return user;
     }
     
+    /**
+     * 注册
+     * @param userLoginDTO
+     */
     @Override
     public void register(UserLoginDTO userLoginDTO) {
         User user = new User();
@@ -70,8 +85,10 @@ public class UserServiceImpl implements UserService {
         user.setUpdatedTime(LocalDateTime.now());
         user.setName(userLoginDTO.getUsername());  // 初始姓名与账号（username）相同
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-        user.setRole(0);
-        user.setGender(1);
+        user.setRole(InfoConstant.ROLE_NORMAL); // 初始角色 默认为普通用户
+        user.setGender(InfoConstant.GENDER_MAN); // 初始性别 默认为男
+        user.setBio(null);
+        user.setEmail(null);
         // TODO 后续添加默认初始头像
         user.setAvatar(null);
         
@@ -79,11 +96,16 @@ public class UserServiceImpl implements UserService {
         
     }
     
+    /**
+     * 更新用户信息
+     * @param userUpdateDTO
+     */
     @Override
     public void update(UserUpdateDTO userUpdateDTO){
         User user = new User();
         BeanUtils.copyProperties(userUpdateDTO, user);
         user.setUpdatedTime(LocalDateTime.now());
+        user.setId(ThreadLocalUtil.getCurrentIdS());
         
         if(!(user.getPassword() == null || user.getPassword() == "")){
             user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
@@ -92,6 +114,11 @@ public class UserServiceImpl implements UserService {
         userMapper.updateById(user);
     }
     
+    /**
+     * 用户分页查询
+     * @param userPageDTO
+     * @return
+     */
     @Override
     public PageResult pageQuery(UserPageDTO userPageDTO){
         // TODO 后续新增其他排序方式：如按照被关注总数，当前用户关注置顶
@@ -106,14 +133,57 @@ public class UserServiceImpl implements UserService {
         return new PageResult(total, records);
     }
     
+    
+    /**登出
+     *
+     * @param currentIdS
+     */
     @Override
     public void logout(Integer currentIdS){
         redisUtil.deleteToken(currentIdS);
     }
     
+    /**注销
+     *
+     * @param id
+     */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void signOff(Integer id){
+        uixMapper.deleteById(id,null);
+        uixMapper.deleteById(null, id);
         userMapper.deleteById(id);
         redisUtil.deleteToken(id);
+    }
+    
+    /**
+     * 根据id查询用户信息
+     * @param id
+     * @return
+     */
+    @Override
+    public UserQueryVO queryById(Integer id){
+        UserQueryVO userQueryVO = new UserQueryVO();
+        if(ThreadLocalUtil.getCurrentIdS() != id) {
+            log.error("不可查询其他用户的个人信息");
+            return null;
+        }
+        User user = userMapper.query(id);
+        BeanUtils.copyProperties(user, userQueryVO);
+        
+        return userQueryVO;
+    }
+    
+    @Override
+    public Integer getCurrentUserFansCount() {
+        Integer id = ThreadLocalUtil.getCurrentIdS();
+        return uixMapper.queryFansCountOnlyOne(id);
+    }
+    
+    @Override
+    public Integer getCurrentUserFollowCount() {
+        Integer id = ThreadLocalUtil.getCurrentIdS();
+        
+        return uixMapper.queryFollowCountOnlyOne(id);
     }
 }

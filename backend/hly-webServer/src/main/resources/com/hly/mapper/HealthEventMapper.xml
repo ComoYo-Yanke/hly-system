@@ -1,0 +1,42 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hly.mapper.HealthEventMapper">
+    <update id="update">
+        update health_event
+        <set>
+            <if test="eventType != null and eventType != ''">event_type = #{eventType},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="eventTime != null">event_time = #{eventTime},</if>
+            <if test="isPublic != null">is_public = #{isPublic},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
+        </set>
+            where user_id = #{userId} and id = #{id}
+    </update>
+
+    <select id="pageQuery" resultType="com.hly.entity.HealthEvent">
+        select * from health_event
+        <where>
+            <if test="eventType != null and eventType != ''">
+                event_type like concat('%',#{eventType},'%')
+            </if>
+            <if test="eventTimeBegan != null and eventTimeEnd != null">
+                and event_time between #{eventTimeBegan} and #{eventTimeEnd}
+            </if>
+            <if test="isPublic != null">
+                and is_public = #{isPublic}
+            </if>
+                 and user_id = #{userId}
+        </where>
+        order by created_time desc
+    </select>
+
+    <select id="count" resultType="com.hly.vo.HealthEventCountVO">
+        select event_type,count(*) num
+        from health_event
+        where user_id = #{userId}
+            and event_time between #{startTime} and #{endTime}
+        group by event_type order by num
+    </select>
+</mapper>

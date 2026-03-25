@@ -1,6 +1,5 @@
-package com.hly.entity;
+package com.hly.dto;
 
-import com.hly.enumeration.EventType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,15 +10,15 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HealthEvent {
+public class HealthEventUpdateDTO {
+    @ApiModelProperty("健康事件id")
     private Integer id;
-    private Integer userId;
+    @ApiModelProperty("事件类型")
     private String eventType;
+    @ApiModelProperty("事件描述")
     private String content;
+    @ApiModelProperty("事件发生时间")
     private LocalDateTime eventTime;
     @ApiModelProperty("是公开的")
-    private Integer isPublic;// 1 为公开 0为私密
-    private LocalDateTime createdTime;
-    private LocalDateTime updatedTime;
-    
+    private Integer isPublic;
 }

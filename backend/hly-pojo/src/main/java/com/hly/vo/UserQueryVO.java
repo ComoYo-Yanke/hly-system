@@ -1,27 +1,25 @@
-package com.hly.entity;
+package com.hly.vo;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class User {
-    @ApiModelProperty("用户id")
+public class UserQueryVO {
     private Integer id;
     private String username;
     private String password;
     private String avatar;
-    private Integer status; // 0 禁用 1 启用
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
     private String name;
-    private Integer role; // 0 普通用户 1 管理员
+    private Integer role;
     private Integer gender;
     private String bio;
     private String email;
+    
 }

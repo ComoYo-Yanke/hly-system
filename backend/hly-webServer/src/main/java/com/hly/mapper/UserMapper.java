@@ -15,9 +15,10 @@ public interface UserMapper {
     User getByUsername(String username);
     
     @Insert("insert into user" +
-            "(username, password, avatar, status, created_time, updated_time, name, role)" +
+            "(username, password, avatar, status, created_time, updated_time, name, role, gender, bio, email)" +
             "values " +
-            "(#{username}, #{password}, #{avatar}, #{status}, #{createdTime}, #{updatedTime}, #{name}, #{role})")
+            "(#{username}, #{password}, #{avatar}, #{status}, #{createdTime}, #{updatedTime}, #{name}, #{role}," +
+            "#{gender},#{bio}, #{email})")
     void insert(User user);
     
     void updateById(User user);
@@ -29,4 +30,7 @@ public interface UserMapper {
     
     @Delete("delete from user where id = #{id}")
     void deleteById(Integer id);
+    
+    @Select("select * from user where id = #{id}")
+    User query(Integer id);
 }

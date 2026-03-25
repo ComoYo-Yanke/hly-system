@@ -5,6 +5,7 @@ import com.hly.dto.UserPageDTO;
 import com.hly.dto.UserUpdateDTO;
 import com.hly.entity.User;
 import com.hly.result.PageResult;
+import com.hly.vo.UserQueryVO;
 
 
 public interface UserService {
@@ -19,4 +20,10 @@ public interface UserService {
     void logout(Integer currentIdS);
     
     void signOff(Integer id);
+    
+    UserQueryVO queryById(Integer id);
+    
+    Integer getCurrentUserFansCount();
+    
+    Integer getCurrentUserFollowCount();
 }
