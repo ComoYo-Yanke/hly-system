@@ -226,6 +226,7 @@
       "list": [
         {
           "id": 1,
+          "userId":1,
           "eventType": "运动",
           "content": "跑步5公里",
           "eventTime": "2025-03-20 18:30:00",
@@ -269,7 +270,7 @@
       "eventType": "string（可选）",
       "content": "string（可选）",
       "eventTime": "string（可选）",
-      "isPublic": 0/1（可选）
+      "isPublic": "0/1（可选）"
     }
     ```
 - **响应示例**：
