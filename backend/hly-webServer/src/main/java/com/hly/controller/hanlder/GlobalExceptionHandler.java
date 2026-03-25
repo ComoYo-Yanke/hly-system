@@ -32,6 +32,7 @@ public class GlobalExceptionHandler {
             String msg =  message.split(" ")[2] + InfoConstant.ALREADY_EXISTS;
             return  Result.error(msg);
         }else{
+            log.error("错误信息：{}", ex.getMessage());
             return Result.error(InfoConstant.UNKNOWN_ERROR);
         }
         
@@ -49,6 +50,7 @@ public class GlobalExceptionHandler {
             
             return Result.error(msg, ErrorCodeConstant.COUNT_EXIST);
         }else{
+            log.error("错误信息：{}", e.getMessage());
             return Result.error(InfoConstant.UNKNOWN_ERROR);
         }
     }

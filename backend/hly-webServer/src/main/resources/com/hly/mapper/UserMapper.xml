@@ -19,6 +19,7 @@
             </set>
         where id = #{id}
     </update>
+
     <select id="pageQuery" resultType="com.hly.entity.User">
         select * from user
         <where>

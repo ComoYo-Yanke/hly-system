@@ -114,9 +114,10 @@ public class UserController {
         return Result.success();
     }
     
-    @GetMapping("/{id}")
+    @GetMapping
     @ApiModelProperty("根据id获取用户基本信息")
-    public Result<UserQueryVO> queryUserById(@PathVariable Integer id){
+    public Result<UserQueryVO> queryUserById(){
+        Integer id = ThreadLocalUtil.getCurrentIdS();
         log.info("查询员工基本信息：{}", id);
         
         UserQueryVO userQueryVO = userService.queryById(id);

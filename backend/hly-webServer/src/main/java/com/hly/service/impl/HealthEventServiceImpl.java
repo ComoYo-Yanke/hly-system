@@ -6,11 +6,13 @@ import com.hly.constant.DataConstant;
 import com.hly.dto.HealthEventInsertDTO;
 import com.hly.dto.HealthEventPageDTO;
 import com.hly.dto.HealthEventPageMapperDTO;
+import com.hly.dto.HealthEventUpdateDTO;
 import com.hly.entity.HealthEvent;
 import com.hly.mapper.HealthEventMapper;
 import com.hly.result.PageResult;
 import com.hly.service.HealthEventService;
 import com.hly.utils.ThreadLocalUtil;
+import com.hly.vo.HealthEventQueryVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,8 @@ public class HealthEventServiceImpl implements HealthEventService {
         healthEvent.setUserId(ThreadLocalUtil.getCurrentIdS());
         healthEvent.setCreatedTime(LocalDateTime.now());
         healthEvent.setUpdatedTime(LocalDateTime.now());
+        if(healthEvent.getEventTime() == null)
+            healthEvent.setEventTime(LocalDateTime.now());
         healthEventMapper.insert(healthEvent);
     }
     
@@ -66,5 +70,30 @@ public class HealthEventServiceImpl implements HealthEventService {
         long total = page.getTotal();
         List<HealthEvent> records = page.getResult();
         return new PageResult(total, records);
+    }
+    
+    /**
+     * 更新健康事件
+     * @param healthEventUpdateDTO
+     */
+    @Override
+    public void update(HealthEventUpdateDTO healthEventUpdateDTO){
+        HealthEvent healthEvent = new HealthEvent();
+        BeanUtils.copyProperties(healthEventUpdateDTO, healthEvent);
+        
+        healthEvent.setUserId(ThreadLocalUtil.getCurrentIdS());
+        healthEvent.setUpdatedTime(LocalDateTime.now());
+        
+        log.info("更新健康事件：{}", healthEvent);
+        healthEventMapper.update(healthEvent);
+    }
+    
+    @Override
+    public HealthEventQueryVO queryById(Integer id){
+        HealthEventQueryVO healthEventQueryVO = new HealthEventQueryVO();
+        Integer userId = ThreadLocalUtil.getCurrentIdS();
+        HealthEvent healthEvent = healthEventMapper.queryById(id, userId);
+        BeanUtils.copyProperties(healthEvent, healthEventQueryVO);
+        return healthEventQueryVO;
     }
 }
