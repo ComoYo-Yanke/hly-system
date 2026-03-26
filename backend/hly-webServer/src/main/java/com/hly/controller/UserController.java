@@ -1,4 +1,4 @@
-package com.hly.service.impl.controller;
+package com.hly.controller;
 
 import com.hly.constant.JwtClaimsConstant;
 import com.hly.dto.UserPageDTO;

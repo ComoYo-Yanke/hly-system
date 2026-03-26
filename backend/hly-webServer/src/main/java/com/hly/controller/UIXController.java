@@ -1,4 +1,4 @@
-package com.hly.service.impl.controller;
+package com.hly.controller;
 
 import com.hly.result.PageResult;
 import com.hly.result.Result;
