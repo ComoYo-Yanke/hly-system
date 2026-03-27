@@ -19,7 +19,7 @@
         select * from health_event
         <where>
             <if test="eventType != null and eventType != ''">
-                event_type like concat('%',#{eventType},'%')
+                event_type = #{eventType}
             </if>
             <if test="eventTimeBegan != null and eventTimeEnd != null">
                 and event_time between #{eventTimeBegan} and #{eventTimeEnd}
@@ -38,5 +38,23 @@
         where user_id = #{userId}
             and event_time between #{startTime} and #{endTime}
         group by event_type order by num
+    </select>
+
+    <select id="pageAllQuery" resultType="com.hly.entity.HealthEvent">
+        select * from health_event
+        <where>
+            <if test="name != null and name != ''">
+                name like concat ('%', #{name}, '%')
+            </if>
+            <if test="eventType != null and eventType != ''">
+                and event_type = #{eventType}
+            </if>
+            <if test="eventTimeBegan != null and eventTimeEnd != null">
+                and event_time between #{eventTimeBegan} and #{eventTimeEnd}
+            </if>
+
+            and is_public = 1
+        </where>
+        order by created_time desc
     </select>
 </mapper>

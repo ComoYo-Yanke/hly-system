@@ -2,6 +2,7 @@ package com.hly.mapper;
 
 import com.github.pagehelper.Page;
 import com.hly.dto.HealthEventCountDTO;
+import com.hly.dto.HealthEventPageAllDTO;
 import com.hly.dto.HealthEventPageMapperDTO;
 import com.hly.entity.HealthEvent;
 import com.hly.vo.HealthEventCountVO;
@@ -32,4 +33,6 @@ public interface HealthEventMapper {
     void delete(Integer id, Integer userId);
     
     List<HealthEventCountVO> count(HealthEventCountDTO healthEventCountDTO);
+    
+    Page<HealthEvent> pageAllQuery(HealthEventPageAllDTO healthEventPageAllDTO);
 }

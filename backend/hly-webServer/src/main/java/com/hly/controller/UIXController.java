@@ -1,5 +1,7 @@
 package com.hly.controller;
 
+import com.hly.dto.HealthEventPageAllDTO;
+import com.hly.dto.HealthEventPageDTO;
 import com.hly.result.PageResult;
 import com.hly.result.Result;
 import com.hly.service.UIXService;
@@ -69,4 +71,10 @@ public class UIXController {
         return Result.success(count);
     }
     
+    @GetMapping("hly/event")
+    @ApiModelProperty("获取所有公开健康事件")
+    public Result<PageResult> getHealthEventPageAll(@RequestBody HealthEventPageAllDTO healthEventPageAllDTO){
+        log.info("分页查询所有健康事件：{}", healthEventPageAllDTO);
+        return Result.success(uixService.pageQuery(healthEventPageAllDTO));
+    }
 }
