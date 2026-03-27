@@ -77,4 +77,6 @@ public class UIXController {
         log.info("分页查询所有健康事件：{}", healthEventPageAllDTO);
         return Result.success(uixService.pageQuery(healthEventPageAllDTO));
     }
+    
+   
 }
