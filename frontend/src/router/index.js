@@ -1,38 +1,34 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import Main from '@/layout/main.vue'
+import { componentSizes } from 'element-plus'
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('@/views/home/Index.vue')
+    redirect: '/home'  // ← 加这个
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: Main,
+    children:[
+      {path: '',component:() => import('@/views/home/index.vue')},
+    ]
+    
   },
   {
     path: '/user/info',
-    component: () => import('@/views/user/Info.vue')
+    
   },
   {
     path: '/health/record',
-    component: () => import('@/views/health/Record.vue')
+    
   },
   {
     path: '/health/report',
-    component: () => import('@/views/health/Report.vue')
-  },
-  {
-    path: '/diet',
-    component: () => import('@/views/diet/Index.vue')
-  },
-  {
-    path: '/sport',
-    component: () => import('@/views/sport/Index.vue')
-  },
-  {
-    path: '/sleep',
-    component: () => import('@/views/sleep/Index.vue')
   },
   {
     path: '/system/setting',
-    component: () => import('@/views/system/Setting.vue')
   }
 ]
 
