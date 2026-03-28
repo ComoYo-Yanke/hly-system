@@ -13,23 +13,14 @@ const routes = [
     component: Main,
     children:[
       {path: '',component:() => import('@/views/home/index.vue')},
+      {path: '/user/info', component:() => import('@/views/user/index.vue')},
+      {path: '/health/event',component:() => import('@/views/health/event.vue')},
+      {path: '/health/remind',component:() => import('@/views/health/remind.vue')},
+      {path: '/system/setting',}
     ]
     
   },
-  {
-    path: '/user/info',
-    
-  },
-  {
-    path: '/health/record',
-    
-  },
-  {
-    path: '/health/report',
-  },
-  {
-    path: '/system/setting',
-  }
+  
 ]
 
 const router = createRouter({

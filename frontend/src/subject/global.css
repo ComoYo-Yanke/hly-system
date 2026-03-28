@@ -6,7 +6,7 @@
 }
 
 [data-theme="light"] {
-    --aside-bgc: #185dc5;
+    --aside-bgc: #1574c2;
     --aside-color: #fbfbfb;
     --header-bgc: #fff;
     --header-color: #0746a6;
@@ -17,7 +17,7 @@
 }
 
 [data-theme="dark"] {
-    --aside-bgc: #092958e9;
+    --aside-bgc: #052049e9;
     --aside-color: #dfe0e1;
     --header-bgc: #032c42;
     --header-color: #2675ed;
