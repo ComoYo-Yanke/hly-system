@@ -116,10 +116,18 @@ public class UserController {
     }
     
     @GetMapping("{id}")
-    @ApiModelProperty("获取用户自己的基本信息")
+    @ApiModelProperty("获取用户的基本信息")
     public Result<UserQueryVO> queryUserById(@PathVariable Integer id){
         log.info("查询员工基本信息：{}", id);
         UserQueryVO userQueryVO = userService.queryById(id);
+        return Result.success(userQueryVO);
+    }
+    
+    @GetMapping()
+    @ApiModelProperty("获取用户自己的基本信息")
+    public Result<UserQueryVO> queryUserById(){
+        log.info("查询员工基本信息：{}", ThreadLocalUtil.getCurrentIdS());
+        UserQueryVO userQueryVO = userService.queryById(ThreadLocalUtil.getCurrentIdS());
         return Result.success(userQueryVO);
     }
     

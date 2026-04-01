@@ -69,6 +69,7 @@ public class HealthEventController {
     }
     
     @GetMapping("/statistics")
+    @ApiModelProperty("统计健康事件")
     public Result<List<HealthEventCountVO>> countOfEvent(@RequestBody HealthEventCountDTO healthEventCountDTO){
         log.info("查询统计健康事件：{}", healthEventCountDTO);
         List<HealthEventCountVO> list =  healthEventService.count(healthEventCountDTO);
