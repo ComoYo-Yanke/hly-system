@@ -2,6 +2,7 @@ package com.hly.controller.hanlder;
 
 import com.hly.constant.ErrorCodeConstant;
 import com.hly.constant.InfoConstant;
+import com.hly.exception.AccountNotFoundException;
 import com.hly.exception.BaseException;
 import com.hly.exception.PasswordErrorException;
 import com.hly.result.Result;
@@ -35,9 +36,9 @@ public class GlobalExceptionHandler {
             log.error("错误信息：{}", ex.getMessage());
             return Result.error(InfoConstant.UNKNOWN_ERROR);
         }
-        
+
     }
-    
+
     @ExceptionHandler
     public Result exceptionHandler(SQLIntegrityConstraintViolationException e){
         String message = e.getMessage();
@@ -45,23 +46,23 @@ public class GlobalExceptionHandler {
             String[] s = message.split(" ");
             String s1 = s[2];
             String msg = s1 + InfoConstant.ALREADY_EXISTS;
-            
+
             System.out.println("当前线程：" + Thread.currentThread().getId());
-            
+
             return Result.error(msg, ErrorCodeConstant.COUNT_EXIST);
         }else{
             log.error("错误信息：{}", e.getMessage());
             return Result.error(InfoConstant.UNKNOWN_ERROR);
         }
     }
-    
+
     @ExceptionHandler
     public Result exceptionHandler(PasswordErrorException ex){
         log.error("异常信息：{}", ex.getMessage());
         String message = ex.getMessage();
         return Result.error(InfoConstant.PASSWORD_ERROR);
     }
-    
+
 //    @ExceptionHandler
 //    public Result allHandler(Exception e){
 //        log.error("异常:{}", e.getMessage());
@@ -72,6 +73,13 @@ public class GlobalExceptionHandler {
     public Result notFoundHandler(NotFoundException e){
         log.error("异常:{}", e.getMessage());
         return Result.error(InfoConstant.NOT_FOUND_RESOURCE);
+
+    }
+    
+    @ExceptionHandler
+    public Result noAccountHandler(AccountNotFoundException e){
+        log.error("异常:{}", e.getMessage());
+        return Result.error(InfoConstant.ACCOUNT_NOT_FOUND);
         
     }
 

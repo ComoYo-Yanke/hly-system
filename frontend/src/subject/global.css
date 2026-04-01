@@ -13,6 +13,9 @@
     --header-shadow: #9e9e9ebe;
     --main-bgc: #f8f8f8;
     --main-color: #333;
+    --button-bgc: #fff;
+    --button-bgc-hover: #e9e7e7;
+    --webkit-thumb-color: #3962f6;
 
 }
 
@@ -24,22 +27,63 @@
     --main-bgc: #021233;
     --main-color: #dbdcde;
     --header-shadow: #636363a7;
+    --button-bgc: #2a3146;
+    --button-bgc-hover: #02173b;
+    --webkit-thumb-color: #052879;
 }
 
+* {
+    /* border: 1px solid red; */
+}
 
-.aside{
+.aside {
     background-color: var(--aside-bgc);
     color: var(--aside-color);
     z-index: 2;
+    transition: all 0.3s ease;
 }
 
-.header{
+.header {
     background-color: var(--header-bgc);
     color: var(--header-color);
     box-shadow: 1px 1px 8px var(--header-shadow);
+    transition: all 0.3s ease;
 }
 
-.main{
+.main {
     background-color: var(--main-bgc);
     color: var(--main-color);
+    transition: all 0.3s ease;
+}
+
+.container {
+    background-color: var(--main-bgc);
+    color: var(--main-color);
+    transition: all 0.3s ease;
+    line-height: 28px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+/* 整个滑动条 */
+::-webkit-scrollbar {
+    width: 5px;
+    padding: 10px;
+}
+
+/* 滑块 */
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+    background: var(--webkit-thumb-color);
+    border-radius: 3px;
+    width: 3px;
+}
+
+.button {
+    color: var(--main-color);
+    background-color: var(--button-bgc);
+
+}
+
+.button:hover {
+    background-color: var(--button-bgc-hover);
 }

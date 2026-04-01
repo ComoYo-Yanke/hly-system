@@ -83,7 +83,7 @@
                             <el-avatar :size="36" :icon="UserFilled" class="user-avatar" />
                             <div class="user-details">
                                 <span class="user-name">{{ isLoggedIn ? (userInfo?.username || '健康使者') : '点击登录' }}</span>
-                                <span class="user-role">{{ isLoggedIn ? (userInfo?.role || 'VIP 会员') : '未登录' }}</span>
+                                <span class="user-role">{{ isLoggedIn ? (userInfo?.role || '') : '未登录' }}</span>
                             </div>
                         </div>
                         <template #dropdown>
@@ -100,11 +100,12 @@
 
             <!-- 主内容区域 - 无内边距 -->
             <div class="main-content">
-                <router-view v-slot="{ Component }">
+                <!-- <router-view v-slot="{ Component }">
                     <transition name="fade-slide" mode="out-in">
                         <component :is="Component" />
                     </transition>
-                </router-view>
+                </router-view> -->
+                <router-view />
             </div>
         </div>
 
@@ -359,6 +360,9 @@ onUnmounted(() => {
 
 <style scoped>
 /* ========== 主布局样式 ========== */
+*{
+    user-select: none;
+}
 .main-layout {
     display: flex;
     min-height: 100vh;

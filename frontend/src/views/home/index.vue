@@ -45,7 +45,7 @@ const titleStyle = reactive({
 
 // ==================== 粒子参数配置 ====================
 const PARTICLE_SIZE = 4
-const PARTICLE_SPACING = 16
+const PARTICLE_SPACING = 20
 
 /**
  * 粒子类 - 增强海浪效果

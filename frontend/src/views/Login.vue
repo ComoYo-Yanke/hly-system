@@ -273,21 +273,22 @@ const handleLogin = async () => {
 
         loginLoading.value = true
         try {
-            const res = await login(loginForm.username, loginForm.password)
-            console.log('登录响应:', res)
+            // login 返回的是 Result 实体类，格式为 { code, message, data }
+            const result = await login(loginForm.username, loginForm.password)
+            console.log('登录响应:', result)
 
-            // 根据后端返回格式调整
-            if (res.code === 200 || res.success === true) {
-                // 存储 token - 根据后端返回的字段名调整
-                const token = res.data?.token || res.token
-                const userInfo = res.data?.userInfo || res.userInfo || { username: loginForm.username }
+            // Result 实体类：code === 200 表示成功
+            if (result.code === 200) {
+                // 从 data 中获取 token 和用户信息
+                const token = result.data?.token
+                const userInfo = result.data?.userInfo || { username: loginForm.username }
 
                 if (token) {
                     localStorage.setItem('token', token)
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     console.log('Token已存储:', token)
 
-                    ElMessage.success(res.message || '登录成功')
+                    ElMessage.success(result.msg || '登录成功')
 
                     // 触发登录成功事件
                     window.dispatchEvent(new CustomEvent('login-success'))
@@ -301,13 +302,14 @@ const handleLogin = async () => {
                     ElMessage.error('登录成功但未返回token')
                 }
             } else {
-                ElMessage.error(res.message || '登录失败')
+                // 业务错误已在拦截器中处理，这里只做额外处理
+                ElMessage.error(result.msg || '登录失败')
                 refreshCaptcha()
                 loginForm.captcha = ''
             }
         } catch (error) {
             console.error('登录错误:', error)
-            ElMessage.error(error.message || '登录失败，请稍后重试')
+            // 错误已经在拦截器中处理，不需要重复弹窗
             refreshCaptcha()
             loginForm.captcha = ''
         } finally {
@@ -329,26 +331,30 @@ const handleRegister = async () => {
 
         registerLoading.value = true
         try {
-            const res = await register(registerForm.username, registerForm.password)
-            console.log('注册响应:', res)
+            // register 返回的是 Result 实体类，格式为 { code, message, data }
+            const result = await register(registerForm.username, registerForm.password)
+            console.log('注册响应:', result)
 
-            if (res.code === 200 || res.success === true) {
-                ElMessage.success(res.message || '注册成功，请登录')
+            if (result.code === 200) {
+                ElMessage.success(result.message || '注册成功，请登录')
 
+                // 清空表单
                 registerForm.username = ''
                 registerForm.password = ''
                 registerForm.confirmPassword = ''
                 registerForm.captcha = ''
+                // 切换到登录页
                 activeTab.value = 'login'
+                // 刷新登录页的验证码
                 refreshCaptcha()
             } else {
-                ElMessage.error(res.message || '注册失败')
+                // 业务错误已在拦截器中处理
                 refreshCaptchaRegister()
                 registerForm.captcha = ''
             }
         } catch (error) {
             console.error('注册错误:', error)
-            ElMessage.error(error.message || '注册失败，请稍后重试')
+            // 错误已经在拦截器中处理
             refreshCaptchaRegister()
             registerForm.captcha = ''
         } finally {
