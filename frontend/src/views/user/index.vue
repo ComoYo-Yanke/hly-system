@@ -29,22 +29,26 @@ const getData = async () => {
     const resultFan = await querySelfFan();
     const resultFollow = await querySelfFollow();
 
-    userData.value = result.data;
+    
+    
+    userData.value = JSON.parse(JSON.stringify(result.data));
     fan.value = resultFan.data;
     follow.value = resultFollow.data;
 
     form.value = JSON.parse(JSON.stringify(result.data)); // 创建拷贝引用 - 方便回显和修改
 
-    if (userData.avatar == null) userAvatar.value = "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-    else userAvatar.value = userData.avatar;
+    if (userData.value.avatar == null) userAvatar.value = "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+    else userAvatar.value = userData.value.avatar;
     if (userData.gender = 1) gender.value = '男';
     else if (userData.gender = 2) gender.value = '女';
-    if (userData.bio == null) bio.value = '还没有个性签名, 说点什么吧~';
-    else bio.value = userAvatar.bio;
+    if (userData.value.bio == null) bio.value = '还没有个性签名, 说点什么吧~';
+    else bio.value = userData.value.bio;
 
-    if (userData.role == 1) roles.value = '管理员';
+    if (userData.value.role == 1) roles.value = '管理员';
     else roles.value = '普通用户';
-
+    console.log("原始返回：" , result.data);
+    console.log("===", userData.value.bio);
+    
 }
 
 const updateUser = async (form) => {
