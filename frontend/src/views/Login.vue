@@ -364,6 +364,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
+*{
+    user-select: none;
+}
 .login-container {
     min-height: 100vh;
     display: flex;
